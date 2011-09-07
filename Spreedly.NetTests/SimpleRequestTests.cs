@@ -46,7 +46,7 @@
         }
 
         [Test]
-        public void RestSharpCreateSubscription()
+        public void RestSharpCreateSubscriber()
         {
             var client = new RestClient("https://spreedly.com");
             client.Authenticator = new HttpBasicAuthenticator("61a2304391b862d526e95f11ee7a3815f0857e3f", "X");
@@ -57,8 +57,8 @@
             request.AddUrlSegment("action", "subscribers.xml");
             var subs = new Subscriber
                            {
-                               ScreenName = "CreateTest4",
-                               CustomerId = "004"
+                               ScreenName = "CreateTest5",
+                               CustomerId = "005"
                            };
             request.AddBody(subs);
 
@@ -76,7 +76,7 @@
             var request = new RestRequest("api/{version}/{site}/{action}", Method.PUT);
             request.AddUrlSegment("version", "v4");
             request.AddUrlSegment("site", "sitedocdan-test");
-            request.AddUrlSegment("action", "subscribers/004.xml");
+            request.AddUrlSegment("action", "subscribers/005.xml");
 
             var subs = new Subscriber
             {
@@ -100,49 +100,6 @@
         }
 
         [Test]
-        public void RestSharpSetSubscriberActive()
-        {
-            var client = new RestClient("https://spreedly.com");
-            client.Authenticator = new HttpBasicAuthenticator("61a2304391b862d526e95f11ee7a3815f0857e3f", "X");
-
-            var request = new RestRequest("api/{version}/{site}/{action}", Method.PUT);
-            request.AddUrlSegment("version", "v4");
-            request.AddUrlSegment("site", "sitedocdan-test");
-            request.AddUrlSegment("action", "subscribers/004.xml");
-
-            var subs = new Subscriber
-            {
-                FeatureLevel = "Magnum (10)"
-            };
-            request.AddBody(subs);
-
-            RestResponse<SubscriptionPlanList> response = client.Execute<SubscriptionPlanList>(request);
-            var name = response.Data.SubscriptionPlans[0].Name;
-
-            Assert.True(true);
-        }
-
-        [Test]
-        public void RestSharpSubscribeSubscriber()
-        {
-            var client = new RestClient("https://spreedly.com");
-            client.Authenticator = new HttpBasicAuthenticator("61a2304391b862d526e95f11ee7a3815f0857e3f", "X");
-
-            var request = new RestRequest("{site}/{action}", Method.GET);
-            request.AddUrlSegment("version", "v4");
-            request.AddUrlSegment("site", "sitedocdan-test");
-
-
-            var subscriberToken = "aef789956af61024d82ec270039601b91e06262a";
-            var subscriptionPlanId = "14143";
-            request.AddUrlSegment("action", string.Format("subscribers/{0}/subscribe/{1}", subscriberToken, subscriptionPlanId));
-
-            RestResponse response = client.Execute(request);
-
-            Assert.True(true);
-        }
-
-        [Test]
         public void RestSharpCreateSubsciptionInvoice()
         {
             var client = new RestClient("https://spreedly.com");
@@ -159,11 +116,44 @@
                                   Subscriber = new Subscriber
                                                    {
                                                        Email = "dan@thesitedoctor.co.uk",
-                                                       ScreenName = "CreateTest4",
-                                                       CustomerId = "004"
+                                                       ScreenName = "CreateTest5",
+                                                       CustomerId = "005"
                                                    }
                               };
             request.AddBody(invoice);
+
+            RestResponse<Invoice> response = client.Execute<Invoice>(request);
+
+            Assert.True(true);
+        }
+
+        [Test]
+        public void RestSharpCloseSubsciptionInvoice()
+        {
+            var client = new RestClient("https://spreedly.com");
+            client.Authenticator = new HttpBasicAuthenticator("61a2304391b862d526e95f11ee7a3815f0857e3f", "X");
+            var invoiceToken = "49ee3beb3511e9cd593115ffc8f45235c98d1b76";
+
+            var request = new RestRequest("api/{version}/{site}/{action}", Method.PUT);
+            request.AddUrlSegment("version", "v4");
+            request.AddUrlSegment("site", "sitedocdan-test");
+            request.AddUrlSegment("action", string.Format("invoices/{0}/pay.xml", invoiceToken));
+
+            var payment = new Payment
+            {
+                AccountType = "credit-card",
+                CreditCard = new CreditCard
+                {
+                    Number = "4222222222222",
+                    CardType = "visa",
+                    VerificationValue = "234",
+                    ExpirationMonth = 1,
+                    ExpirationYear = 2012,
+                    FirstName = "Fred",
+                    LastName = "Jones"
+                }
+            };
+            request.AddBody(payment);
 
             RestResponse<Invoice> response = client.Execute<Invoice>(request);
 
