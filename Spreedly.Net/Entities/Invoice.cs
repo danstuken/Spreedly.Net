@@ -8,6 +8,8 @@
         [SerializeAs(Name = "subscription-plan-id")]
         public int SubscriptionPlanId { get; set; }
 
+
+
         public Subscriber Subscriber { get; set; }
     }
 }

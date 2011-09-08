@@ -34,12 +34,22 @@
 
         public SpreedlyResponse<TEntity> Post<TEntity>(string urlActionSegment, TEntity postObject) where TEntity : new()
         {
-            return TryRequest<TEntity>(_requestBuilder.BuildPostRequest(urlActionSegment, postObject));
+            return Post<TEntity,TEntity>(urlActionSegment, postObject);
+        }
+
+        public SpreedlyResponse<TResponse> Post<TPost, TResponse>(string urlActionSegment, TPost postObject) where TResponse : new()
+        {
+            return TryRequest<TResponse>(_requestBuilder.BuildPostRequest(urlActionSegment, postObject));
         }
 
         public SpreedlyResponse<TEntity> Put<TEntity>(string urlActionSegment, TEntity putObject) where TEntity : new()
         {
-            return TryRequest<TEntity>(_requestBuilder.BuildPutRequest(urlActionSegment, putObject));
+            return Put<TEntity, TEntity>(urlActionSegment, putObject);
+        }
+
+        public SpreedlyResponse<TResponse> Put<TPut, TResponse>(string urlActionSegment, TPut putObject) where TResponse : new()
+        {
+            return TryRequest<TResponse>(_requestBuilder.BuildPutRequest(urlActionSegment, putObject));
         }
 
         private SpreedlyResponse<TEntity> TryRequest<TEntity>(RestRequest request) where TEntity: new()
@@ -85,5 +95,6 @@
             client.Authenticator = new HttpBasicAuthenticator(_userName, _password);
             return client;
         }
+
     }
 }

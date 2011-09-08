@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ISpreedlyInvoices.cs" />
     <Compile Include="Api\ISpreedlyParameters.cs" />
     <Compile Include="Api\ISpreedlySubscribers.cs" />
+    <Compile Include="Api\SpreedlyInvoiceClient.cs" />
     <Compile Include="Api\SpreedlyParameters.cs" />
     <Compile Include="Api\SpreedlySubscriberClient.cs" />
     <Compile Include="Client\IRequestBuilder.cs" />
