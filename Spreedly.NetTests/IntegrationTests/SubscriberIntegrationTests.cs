@@ -27,6 +27,7 @@
             var subs = _subscribers.GetSubscribers();
 
             Assert.AreEqual(SpreedlyStatus.Ok, subs.Status);
+            Assert.True(subs.Entity.Subscribers.Count > 0);
         }
 
         [Test]
@@ -35,7 +36,6 @@
             var custId = "aef789956af61024d82ec270039601b91e06262a";
             var sub = _subscribers.GetSubscriberByCustomerId(custId);
 
-            Assert.AreEqual(SpreedlyStatus.Ok, sub.Status);
             Assert.AreEqual(custId, sub.Entity.CustomerId);
         }
 

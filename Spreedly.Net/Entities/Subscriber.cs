@@ -1,75 +1,113 @@
 ﻿namespace Spreedly.Net.Entities
 {
     using System;
-    using RestSharp.Serializers;
+    using System.Xml.Serialization;
+    using Xml;
 
-    [SerializeAs(NameStyle = NameStyle.LowerCase)]
+    [XmlRoot(ElementName = "subscriber")]
     public class Subscriber
     {
 
-        public bool? Active { get; set; }
-        [SerializeAs(Name = "active-until")]
-        public DateTime? ActiveUntil { get; set; }
-        [SerializeAs(Name = "billing-first-name")]
+        [XmlElement(ElementName = "active", IsNullable = true)]
+        public SerializableNullable<bool> Active { get; set; }
+
+        [XmlElement(ElementName = "active-until", IsNullable = true)]
+        public SerializableNullable<DateTime> ActiveUntil { get; set; }
+
+        [XmlElement(ElementName = "billing-first-name")]
         public string BillingFirstName { get; set; }
-        [SerializeAs(Name = "billing-last-name")]
+
+        [XmlElement(ElementName = "billing-last-name")]
         public string BillingLastName { get; set; }
-        [SerializeAs(Name = "card-expires-before-next-auto-renew")]
-        public bool? CardExpiresBeforeNextAutoRenew { get; set; }
-        [SerializeAs(Name = "created-at")]
-        public DateTime? CreatedAt { get; set; }
-        [SerializeAs(Name = "customer-id")]
+
+        [XmlElement(ElementName = "card-expires-before-next-auto-renew", IsNullable = true)]
+        public SerializableNullable<bool> CardExpiresBeforeNextAutoRenew { get; set; }
+
+        [XmlElement(ElementName = "created-at", IsNullable = true)]
+        public SerializableNullable<DateTime> CreatedAt { get; set; }
+
+        [XmlElement(ElementName = "customer-id")]
         public string CustomerId { get; set; }
-        [SerializeAs(Name = "eligible-for-free-trial")]
-        public bool? EligibleForFreeTrial { get; set; }
+
+        [XmlElement(ElementName = "eligible-for-free-trial", IsNullable = true)]
+        public SerializableNullable<bool> EligibleForFreeTrial { get; set; }
+
+        [XmlElement(ElementName = "email")]
         public string Email { get; set; }
-        [SerializeAs(Name = "feature-level")]
+
+        [XmlElement(ElementName = "feature-level")]
         public string FeatureLevel { get; set; }
-        [SerializeAs(Name = "lifetime-subscription")]
-        public bool? LifetimeSubscription { get; set; }
-        [SerializeAs(Name = "on-trial")]
-        public bool? OnTrial { get; set; }
-        [SerializeAs(Name = "on-gift")]
-        public bool? OnGift { get; set; }
-        [SerializeAs(Name = "on-metered")]
-        public bool? OnMetered { get; set; }
-        public bool? Recurring { get; set; }
-        [SerializeAs(Name = "screen-name")]
+
+        [XmlElement(ElementName = "lifetime-subscription", IsNullable = true)]
+        public SerializableNullable<bool> LifetimeSubscription { get; set; }
+
+        [XmlElement(ElementName = "on-trial", IsNullable = true)]
+        public SerializableNullable<bool> OnTrial { get; set; }
+
+        [XmlElement(ElementName = "on-gift", IsNullable = true)]
+        public SerializableNullable<bool> OnGift { get; set; }
+
+        [XmlElement(ElementName = "on-metered")]
+        public SerializableNullable<bool> OnMetered { get; set; }
+
+        [XmlElement(ElementName = "recurring", IsNullable = true)]
+        public SerializableNullable<bool> Recurring { get; set; }
+
+        [XmlElement(ElementName = "screen-name")]
         public string ScreenName { get; set; }
-        [SerializeAs(Name = "store-credit")]
-        public decimal? StoreCredit { get; set; }
-        [SerializeAs(Name = "store-credit-currency-code")]
+
+        [XmlElement(ElementName = "store-credit")]
+        public SerializableNullable<decimal> StoreCredit { get; set; }
+
+        [XmlElement(ElementName = "store-credit-currency-code")]
         public string StoreCreditCurrencyCode { get; set; }
-        [SerializeAs(Name = "subscription-plan-name")]
+
+        [XmlElement(ElementName = "subscription-plan-name")]
         public string SubscriptionPlanName { get; set; }
+
+        [XmlElement(ElementName = "token")]
         public string Token { get; set; }
-        [SerializeAs(Name = "updated-at")]
-        public DateTime? UpdatedAt { get; set; }
-        [SerializeAs(Name = "grace-until")]
-        public DateTime? GraceUntil { get; set; }
-        [SerializeAs(Name = "in-grace-period")]
-        public bool? InGracePeriod { get; set; }
-        [SerializeAs(Name = "ready-to-renew")]
-        public bool? ReadyToRenew { get; set; }
-        [SerializeAs(Name = "ready-to-renew-since")]
-        public DateTime? ReadyToRenewSince { get; set; }
-        [SerializeAs(Name = "payment-account-on-file")]
-        public bool? PaymentAccountOnFile { get; set; }
-        [SerializeAs(Name = "payment-account-display")]
-        public bool? PaymentAccountDisplay { get; set; }
-        [SerializeAs(Name = "billing-address1")]
+
+        [XmlElement(ElementName = "updated-at", IsNullable = true)]
+        public SerializableNullable<DateTime> UpdatedAt { get; set; }
+
+        [XmlElement(ElementName = "grace-until", IsNullable = true)]
+        public SerializableNullable<DateTime> GraceUntil { get; set; }
+
+        [XmlElement(ElementName = "in-grace-period", IsNullable = true)]
+        public SerializableNullable<bool> InGracePeriod { get; set; }
+
+        [XmlElement(ElementName = "ready-to-renew", IsNullable = true)]
+        public SerializableNullable<bool> ReadyToRenew { get; set; }
+
+        [XmlElement(ElementName = "ready-to-renew-since", IsNullable = true)]
+        public SerializableNullable<DateTime> ReadyToRenewSince { get; set; }
+
+        [XmlElement(ElementName = "payment-account-on-file", IsNullable = true)]
+        public SerializableNullable<bool> PaymentAccountOnFile { get; set; }
+
+        [XmlElement(ElementName = "payment-account-display", IsNullable = true)]
+        public string PaymentAccountDisplay { get; set; }
+
+        [XmlElement(ElementName = "billing-address1")]
         public string BillingAddress1 { get; set; }
-        [SerializeAs(Name = "billing-city")]
+
+        [XmlElement(ElementName = "billing-city")]
         public string BillingCity { get; set; }
-        [SerializeAs(Name = "billing-state")]
+
+        [XmlElement(ElementName = "billing-state")]
         public string BillingState { get; set; }
-        [SerializeAs(Name = "billing-zip")]
+
+        [XmlElement(ElementName = "billing-zip")]
         public string BillingZip { get; set; }
-        [SerializeAs(Name = "billing-country")]
+
+        [XmlElement(ElementName = "billing-country")]
         public string BillingCountry { get; set; }
-        [SerializeAs(Name = "billing-phone-number")]
+
+        [XmlElement(ElementName = "billing-phone-number")]
         public string BillingPhoneNumber { get; set; }
-        [SerializeAs(Name = "payment-method")]
+
+        [XmlElement(ElementName = "payment-method")]
         public CreditCard PaymentMethod { get; set; }
     }
 }

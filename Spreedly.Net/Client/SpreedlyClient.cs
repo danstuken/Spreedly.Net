@@ -4,6 +4,7 @@
     using System.Net;
     using RestSharp;
     using System.Linq;
+    using Xml;
 
     public class SpreedlyClient: ISpreedlyClient
     {
@@ -93,6 +94,10 @@
         {
             var client = new RestClient(BaseSpreedlyUrl);
             client.Authenticator = new HttpBasicAuthenticator(_userName, _password);
+            client.RemoveHandler("application/xml");
+            client.RemoveHandler("text/xml");
+            client.AddHandler("application/xml", new FrameworkDeserializer());
+            client.AddHandler("text/xml", new FrameworkDeserializer());
             return client;
         }
 

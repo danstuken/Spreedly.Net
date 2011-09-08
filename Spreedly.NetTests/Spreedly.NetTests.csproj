@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExpressionToCodeLib">
+      <HintPath>..\_ExternalReferences\ExpressionToCodeLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Spreedly.Net\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -58,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Deserialize\SubscriberListTests.cs" />
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderTests\SerialiseSpike\FrameworkDeserialiser.cs" />
