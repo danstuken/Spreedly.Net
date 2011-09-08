@@ -51,6 +51,7 @@
     <Compile Include="Api\SpreedlyParameters.cs" />
     <Compile Include="Api\SpreedlySubscriberClient.cs" />
     <Compile Include="Client\IRequestBuilder.cs" />
+    <Compile Include="Client\ISpreedlyClient.cs" />
     <Compile Include="Client\IStatusResolver.cs" />
     <Compile Include="Client\SpreedlyClient.cs" />
     <Compile Include="Client\SpreedlyRequestBuilder.cs" />

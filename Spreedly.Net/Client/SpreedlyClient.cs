@@ -5,7 +5,7 @@
     using RestSharp;
     using System.Linq;
 
-    public class SpreedlyClient
+    public class SpreedlyClient: ISpreedlyClient
     {
         private string _userName;
         private string _password;
