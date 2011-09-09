@@ -1,15 +1,49 @@
 ﻿namespace Spreedly.Net.Entities
 {
-    using RestSharp.Serializers;
+    using System;
+    using System.Xml.Serialization;
+    using Xml;
 
-    [SerializeAs(NameStyle = NameStyle.LowerCase)]
+    [XmlRoot(ElementName = "invoice")]
     public class Invoice
     {
-        [SerializeAs(Name = "subscription-plan-id")]
-        public int SubscriptionPlanId { get; set; }
-
-
-
+        [XmlElement(ElementName = "closed")]
+        public SerializableNullable<bool> Closed { get; set; }
+        
+        [XmlElement(ElementName = "created-at")]
+        public SerializableNullable<DateTime> CreatedAt { get; set; }
+        
+        [XmlElement(ElementName = "response-client-message")]
+        public string ResponseClientMessage { get; set; }
+        
+        [XmlElement(ElementName = "response-customer-message")]
+        public string ResponseCustomerMessage { get; set; }
+        
+        [XmlElement(ElementName = "response-message")]
+        public string ResponseMessage { get; set; }
+        
+        [XmlElement(ElementName = "token")]
+        public string Token { get; set; }
+        
+        [XmlElement(ElementName = "updated-at")]
+        public SerializableNullable<DateTime> UpdatedAt { get; set; }
+        
+        [XmlElement(ElementName = "price")]
+        public string Price { get; set; }
+        
+        [XmlElement(ElementName = "amount")]
+        public SerializableNullable<decimal> Amount { get; set; }
+        
+        [XmlElement(ElementName = "currency-code")]
+        public string CurrencyCode { get; set; }
+        
+        [XmlElement(ElementName = "subscriber")]
         public Subscriber Subscriber { get; set; }
+        
+        [XmlElement(ElementName = "subscription-plan-id")]
+        public SerializableNullable<int> SubscriptionPlanId { get; set; }
+
+        [XmlElement(ElementName = "line-items")]
+        public LineItemList LineItemList { get; set; }
     }
 }

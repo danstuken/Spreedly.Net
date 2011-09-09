@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Deserialize\SubscriberListTests.cs" />
+    <Compile Include="IntegrationTests\RequestIntegrationTests.cs" />
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderTests\SerialiseSpike\FrameworkDeserialiser.cs" />

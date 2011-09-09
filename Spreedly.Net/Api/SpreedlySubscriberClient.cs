@@ -31,16 +31,24 @@
             return _client.Post("subscribers.xml", newSubscriber);
         }
 
-        public SpreedlyStatus CancelSubscriptionByCustomerId(string customerId)
+        public SpreedlyResponse<Subscriber> CancelSubscriptionByCustomerId(string customerId)
         {
-            var response = _client.Post<Subscriber>(string.Format("subscribers/{0}/stop_auto_renew.xml", customerId), null);
-            return response.Status;
+            return _client.Post<Subscriber>(string.Format("subscribers/{0}/stop_auto_renew.xml", customerId), null);
         }
 
-        public SpreedlyStatus UpdateSubscriber(Subscriber subscriber)
+        public SpreedlyResponse<Subscriber> UpdateSubscriber(Subscriber subscriber)
         {
-            var response = _client.Put<Subscriber>(string.Format("subscribers/{0}.xml", subscriber.CustomerId), subscriber);
-            return response.Status;
+            return _client.Put(string.Format("subscribers/{0}.xml", subscriber.CustomerId), subscriber);
+        }
+
+        public SpreedlyResponse DeleteSubscriber(string customerId)
+        {
+            return _client.Delete(string.Format("subscribers/{0}.xml", customerId));
+        }
+
+        public SpreedlyResponse DeleteAllSubscribers()
+        {
+            return _client.Delete("subscribers.xml");
         }
 
         private static SpreedlyClient GetSpreedlyClient(ISpreedlyParameters parameters)

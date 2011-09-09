@@ -62,6 +62,8 @@
     <Compile Include="Client\StatusResolver.cs" />
     <Compile Include="Entities\CreditCard.cs" />
     <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="Entities\LineItem.cs" />
+    <Compile Include="Entities\LineItemList.cs" />
     <Compile Include="Entities\Payment.cs" />
     <Compile Include="Entities\Subscriber.cs" />
     <Compile Include="Entities\SubscriberList.cs" />

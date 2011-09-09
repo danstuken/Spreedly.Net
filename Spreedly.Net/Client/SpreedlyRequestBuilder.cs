@@ -1,6 +1,9 @@
 ﻿namespace Spreedly.Net.Client
 {
+    using System.Text;
     using RestSharp;
+    using RestSharp.Serializers;
+    using Xml;
 
     public class SpreedlyRequestBuilder: IRequestBuilder
     {
@@ -32,6 +35,11 @@
             return request;
         }
 
+        public RestRequest BuildDeleteRequest(string urlActionSegment)
+        {
+            return BuildRequest(Method.DELETE, urlActionSegment);
+        }
+
         public RestRequest BuildPutRequest(string actionUrlSegment, object putData)
         {
             var request = BuildRequest(Method.PUT, actionUrlSegment);
@@ -45,7 +53,18 @@
             request.AddUrlSegment("version", _apiVersion);
             request.AddUrlSegment("site", _siteName);
             request.AddUrlSegment("action", urlSegment);
+            request.XmlSerializer = GetFrameworkSerializer();
             return request;
+        }
+
+        private ISerializer GetFrameworkSerializer()
+        {
+            var fwSerializer = new FrameworkSerializer();
+            fwSerializer.Encoding = Encoding.UTF8;
+            fwSerializer.ContentType = "text/xml";
+            fwSerializer.Namespace = string.Empty;
+            fwSerializer.RootElement = string.Empty;
+            return fwSerializer;
         }
     }
 }

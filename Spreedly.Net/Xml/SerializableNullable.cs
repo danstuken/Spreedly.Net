@@ -46,11 +46,11 @@
         {
             if(HasValue)
                 writer.WriteValue(value);
-            else
-            {
-                writer.WriteAttributeString("nil", string.Empty, "true");
-                writer.WriteValue(string.Empty);
-            }
+        }
+
+        public bool ShouldSerialize()
+        {
+            return HasValue;
         }
 
         private void ReadNullValue()

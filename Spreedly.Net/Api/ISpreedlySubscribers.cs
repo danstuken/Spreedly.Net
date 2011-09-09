@@ -8,7 +8,9 @@
         SpreedlyResponse<SubscriberList> GetSubscribers();
         SpreedlyResponse<Subscriber> GetSubscriberByCustomerId(string customerId);
         SpreedlyResponse<Subscriber> CreateSubscriber(Subscriber newSubscriber);
-        SpreedlyStatus CancelSubscriptionByCustomerId(string customerId);
-        SpreedlyStatus UpdateSubscriber(Subscriber subscriber);
+        SpreedlyResponse<Subscriber> CancelSubscriptionByCustomerId(string customerId);
+        SpreedlyResponse<Subscriber> UpdateSubscriber(Subscriber subscriber);
+        SpreedlyResponse DeleteSubscriber(string customerId);
+        SpreedlyResponse DeleteAllSubscribers();
     }
 }

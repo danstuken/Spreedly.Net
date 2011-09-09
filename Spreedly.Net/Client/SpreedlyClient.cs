@@ -13,6 +13,8 @@
         private IRequestBuilder _requestBuilder;
         private IStatusResolver _statusResolver;
 
+        private IRestClient _restClient;
+
         private const string BaseSpreedlyUrl = "https://spreedly.com";
 
         public SpreedlyClient(string username, string password, string apiVersion)
@@ -26,6 +28,7 @@
             _password = password;
             _requestBuilder = requestBuilder;
             _statusResolver = statusResolver;
+            _restClient = GetClient();
         }
 
         public SpreedlyResponse<TEntity> Get<TEntity>(string urlActionSegment) where TEntity: new()
@@ -53,19 +56,50 @@
             return TryRequest<TResponse>(_requestBuilder.BuildPutRequest(urlActionSegment, putObject));
         }
 
+        public SpreedlyResponse Delete(string urlActionSegment)
+        {
+            return TryRequest(_requestBuilder.BuildDeleteRequest(urlActionSegment));
+        }
+
+        private SpreedlyResponse TryRequest(RestRequest request)
+        {
+            try
+            {
+                var clientResponse = _restClient.Execute(request);
+                var response = new SpreedlyResponse();
+                PopulateResponse(clientResponse, response);
+                return response;
+            }
+            catch (WebException ex)
+            {
+                return new SpreedlyResponse
+                {
+                    Status = SpreedlyStatus.UnspecifiedError,
+                    Error = ex
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         private SpreedlyResponse<TEntity> TryRequest<TEntity>(RestRequest request) where TEntity: new()
         {
             try
             {
-                return GetResponse(DoRequest<TEntity>(request));
+                var clientResponse = _restClient.Execute<TEntity>(request);
+                var response = new SpreedlyResponse<TEntity>();
+                response.Entity = clientResponse.Data;
+                PopulateResponse(clientResponse, response);
+                return response;
             }
             catch (WebException ex)
             {
                 return new SpreedlyResponse<TEntity>
                            {
                                Status = SpreedlyStatus.UnspecifiedError,
-                               Error = ex,
-                               Entity = default(TEntity)
+                               Error = ex
                            };
             }
             catch (Exception ex)
@@ -74,20 +108,11 @@
             }
         }
 
-        private RestResponse<TEntity> DoRequest<TEntity>(RestRequest request) where TEntity: new()
+        private void PopulateResponse(IRestResponse restResponse, SpreedlyResponse outResponse)
         {
-            var client = GetClient();
-            return client.Execute<TEntity>(request);
-        }
-
-        private SpreedlyResponse<TEntity> GetResponse<TEntity>(RestResponse<TEntity> restResponse)
-        {
-            var response = new SpreedlyResponse<TEntity>();
-            response.Entity = restResponse.Data;
-            response.Status = _statusResolver.Resolve(restResponse.Headers.FirstOrDefault(hdr => hdr.Type == ParameterType.HttpHeader && hdr.Name == "Status"));
+            outResponse.Status = _statusResolver.Resolve(restResponse.Headers.FirstOrDefault(hdr => hdr.Type == ParameterType.HttpHeader && hdr.Name == "Status"));
             if (restResponse.ResponseStatus == ResponseStatus.Error)
-                response.Error = restResponse.ErrorException;
-            return response;
+                outResponse.Error = restResponse.ErrorException;
         }
 
         private RestClient GetClient()

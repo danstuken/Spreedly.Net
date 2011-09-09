@@ -7,5 +7,6 @@
         SpreedlyResponse<TResponse> Post<TPost,TResponse>(string urlActionSegment, TPost postObject) where TResponse : new();
         SpreedlyResponse<TEntity> Put<TEntity>(string urlActionSegment, TEntity putObject) where TEntity : new();
         SpreedlyResponse<TResponse> Put<TPut, TResponse>(string urlActionSegment, TPut putObject) where TResponse : new();
+        SpreedlyResponse Delete(string urlActionSegment);
     }
 }
