@@ -50,6 +50,7 @@
     <Compile Include="Api\ISpreedlyParameters.cs" />
     <Compile Include="Api\ISpreedlySubscribers.cs" />
     <Compile Include="Api\ISpreedlySubscriptionPlans.cs" />
+    <Compile Include="Api\ISpreedlyTest.cs" />
     <Compile Include="Api\SpreedlyClientFactory.cs" />
     <Compile Include="Api\SpreedlyParameters.cs" />
     <Compile Include="Api\SpreedlyV4Api.cs" />
@@ -61,11 +62,16 @@
     <Compile Include="Client\SpreedlyResponse.cs" />
     <Compile Include="Client\SpreedlyStatus.cs" />
     <Compile Include="Client\StatusResolver.cs" />
+    <Compile Include="Entities\ComplimentarySubscription.cs" />
+    <Compile Include="Entities\ComplimentaryTimeExtension.cs" />
     <Compile Include="Entities\CreditCard.cs" />
+    <Compile Include="Entities\Fee.cs" />
     <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="Entities\LifetimeComplimentarySubscription.cs" />
     <Compile Include="Entities\LineItem.cs" />
     <Compile Include="Entities\LineItemList.cs" />
     <Compile Include="Entities\Payment.cs" />
+    <Compile Include="Entities\StoreCredit.cs" />
     <Compile Include="Entities\Subscriber.cs" />
     <Compile Include="Entities\SubscriberList.cs" />
     <Compile Include="Entities\SubscriptionPlan.cs" />

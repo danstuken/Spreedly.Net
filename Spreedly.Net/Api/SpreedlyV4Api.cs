@@ -3,7 +3,7 @@
     using Client;
     using Entities;
 
-    public class SpreedlyV4Api: ISpreedlyInvoices, ISpreedlySubscribers, ISpreedlySubscriptionPlans
+    public class SpreedlyV4Api: ISpreedlyInvoices, ISpreedlySubscribers, ISpreedlySubscriptionPlans, ISpreedlyTest
     {
         private ISpreedlyClient _client;
 
@@ -38,9 +38,44 @@
             return _client.Post("subscribers.xml", newSubscriber);
         }
 
-        public SpreedlyResponse<Subscriber> CancelSubscriptionByCustomerId(string customerId)
+        public SpreedlyResponse<Subscriber> StopAutoRenew(string customerId)
         {
             return _client.Post<Subscriber>(string.Format("subscribers/{0}/stop_auto_renew.xml", customerId), null);
+        }
+
+        public SpreedlyResponse<Subscriber> GiveSubscriberComplimentarySubscription(string customerId, ComplimentarySubscription complimentarySubscription)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpreedlyResponse<Subscriber> GiveSubscriberComplimentaryTimeExtensions(string customerId, ComplimentaryTimeExtension complimentaryTimeExtension)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpreedlyResponse<Subscriber> GiveSubscriberLifetimeComplimentarySubscription(string customerId, LifetimeComplimentarySubscription lifetimeComplimentarySubscription)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpreedlyResponse GiveSubscriberStoreCredit(string customerId, StoreCredit credit)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpreedlyResponse AddFeeToSubscriber(string customerId, Fee fee)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpreedlyResponse<Subscriber> SubscribeSubscriberToFreeTrial(string customerId, SubscriptionPlan freePlan)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpreedlyResponse AllowSubscriberAnotherFreeTrial(string customerId)
+        {
+            throw new System.NotImplementedException();
         }
 
         public SpreedlyResponse<Subscriber> UpdateSubscriber(Subscriber subscriber)
