@@ -1,45 +1,137 @@
 ﻿namespace Spreedly.Net.Entities
 {
     using System;
-    using RestSharp.Serializers;
+    using System.Xml.Serialization;
+    using Xml;
 
-    [SerializeAs(NameStyle = NameStyle.LowerCase)]
+    [XmlRoot(ElementName = "subscription-plan")]
     public class SubscriptionPlan
     {
-        public Decimal? Amount { get; set; }
-        [SerializeAs(Name = "charge-after-first-period")]
-        public bool? ChargeAfterFirstPeriod { get; set; }
-        [SerializeAs(Name = "charge-later-duration-quantity")]
-        public int? ChargeLaterDuration { get; set; }
-        [SerializeAs(Name = "charge-later-duration-units")]
+        [XmlElement(ElementName = "amount")]
+        public SerializableNullable<decimal> Amount { get; set; }
+
+        [XmlElement(ElementName = "charge-after-first-period")]
+        public SerializableNullable<bool> ChargeAfterFirstPeriod { get; set; }
+
+        [XmlElement(ElementName = "charge-later-duration-quantity")]
+        public SerializableNullable<int> ChargeLaterDuration { get; set; }
+
+        [XmlElement(ElementName = "charge-later-duration-units")]
         public string ChargerLaterDurationUnits { get; set; }
-        [SerializeAs(Name = "created-at")]
-        public DateTime? CreatedAt { get; set; }
-        [SerializeAs(Name = "currency-code")]
+
+        [XmlElement(ElementName = "created-at")]
+        public SerializableNullable<DateTime> CreatedAt { get; set; }
+
+        [XmlElement(ElementName = "currency-code")]
         public string CurrencyCode { get; set; }
+
+        [XmlElement(ElementName = "description")]
         public string Description { get; set; }
-        [SerializeAs(Name = "duration-quantity")]
-        public int? Duration { get; set; }
-        [SerializeAs(Name = "duration-units")]
+
+        [XmlElement(ElementName = "duration-quantity")]
+        public SerializableNullable<int> Duration { get; set; }
+
+        [XmlElement(ElementName = "duration-units")]
         public string DurationUnits { get; set; }
-        public bool? Enabled { get; set; }
-        [SerializeAs(Name = "feature-level")]
+
+        [XmlElement(ElementName = "enabled")]
+        public SerializableNullable<bool> Enabled { get; set; }
+
+        [XmlElement(ElementName = "feature-level")]
         public string FeatureLevel { get; set; }
-        [SerializeAs(Name = "force-recurring")]
-        public bool? ForceRecurring { get; set; }
-        public int? Id { get; set; }
-        [SerializeAs(Name = "minimum-needed-for-charge")]
-        public decimal? MinimumNeededForCharge { get; set; }
+
+        [XmlElement(ElementName = "force-recurring")]
+        public SerializableNullable<bool> ForceRecurring { get; set; }
+
+        [XmlElement(ElementName = "id")]
+        public SerializableNullable<int> Id { get; set; }
+
+        [XmlElement(ElementName = "minimum-needed-for-charge")]
+        public SerializableNullable<decimal> MinimumNeededForCharge { get; set; }
+
+        [XmlElement(ElementName = "name")]
         public string Name { get; set; }
-        [SerializeAs(Name = "needs-to-be-renewed")]
-        public bool? NeedsToBeRenewed { get; set; }
-        [SerializeAs(Name = "plan-type")]
+
+        [XmlElement(ElementName = "needs-to-be-renewed")]
+        public SerializableNullable<bool> NeedsToBeRenewed { get; set; }
+
+        [XmlElement(ElementName = "plan-type")]
         public string PlanType { get; set; }
-        [SerializeAs(Name = "return-url")]
+
+        [XmlElement(ElementName = "return-url")]
         public string ReturnUrl { get; set; }
-        [SerializeAs(Name = "updated-at")]
-        public DateTime? UpdatedAt { get; set; }
+
+        [XmlElement(ElementName = "updated-at")]
+        public SerializableNullable<DateTime> UpdatedAt { get; set; }
+
+        [XmlElement(ElementName = "terms")]
         public string Terms { get; set; }
-        public decimal? Price { get; set; }
+
+        [XmlElement(ElementName = "price")]
+        public SerializableNullable<decimal> Price { get; set; }
+
+        #region ShouldSerialize Convention methods
+
+        public bool ShouldSerializeAmount()
+        {
+            return Amount.HasValue;
+        }
+
+        public bool ShouldSerializeChargeAfterFirstPeriod()
+        {
+            return ChargeAfterFirstPeriod.HasValue;
+        }
+
+        public bool ShouldSerializeChargeLaterDuration()
+        {
+            return ChargeLaterDuration.HasValue;
+        }
+
+        public bool ShouldSerializeCreatedAt()
+        {
+            return CreatedAt.HasValue;
+        }
+
+        public bool ShouldSerializeDuration()
+        {
+            return Duration.HasValue;
+        }
+
+        public bool ShouldSerializeEnabled()
+        {
+            return Enabled.HasValue;
+        }
+
+        public bool ShouldSerializeForceRecurring()
+        {
+            return ForceRecurring.HasValue;
+        }
+
+        public bool ShouldSerializeId()
+        {
+            return Id.HasValue;
+        }
+
+        public bool ShouldSerializeMinimumNeededForCharge()
+        {
+            return MinimumNeededForCharge.HasValue;
+        }
+
+        public bool ShouldSerializeNeedsToBeRenewed()
+        {
+            return NeedsToBeRenewed.HasValue;
+        }
+
+        public bool ShouldSerializeUpdatedAt()
+        {
+            return UpdatedAt.HasValue;
+        }
+
+        public bool ShouldSerializePrice()
+        {
+            return Price.HasValue;
+        }
+
+        #endregion
     }
 }

@@ -20,5 +20,14 @@
 
         [XmlElement(ElementName = "price")]
         public string Price { get; set; }
+
+        #region ShouldSerialize Convention methods
+        
+        public bool ShouldSerializeAmount()
+        {
+            return Amount.HasValue;
+        }
+
+        #endregion
     }
 }

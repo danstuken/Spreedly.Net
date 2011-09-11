@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Deserialize\SubscriberListTests.cs" />
+    <Compile Include="Deserialize\SubscriptionPlanListTests.cs" />
+    <Compile Include="IntegrationTests\InvoiceIntegrationTests.cs" />
     <Compile Include="IntegrationTests\RequestIntegrationTests.cs" />
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,7 +72,6 @@
     <Compile Include="ProviderTests\SerialiseSpike\SerializableNullable.cs" />
     <Compile Include="ProviderTests\SerialiseSpike\Subscriber.cs" />
     <Compile Include="ProviderTests\SerialiseSpike\XmlSerialiseTests.cs" />
-    <Compile Include="SimpleRequestTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -49,9 +49,10 @@
     <Compile Include="Api\ISpreedlyInvoices.cs" />
     <Compile Include="Api\ISpreedlyParameters.cs" />
     <Compile Include="Api\ISpreedlySubscribers.cs" />
-    <Compile Include="Api\SpreedlyInvoiceClient.cs" />
+    <Compile Include="Api\ISpreedlySubscriptionPlans.cs" />
+    <Compile Include="Api\SpreedlyClientFactory.cs" />
     <Compile Include="Api\SpreedlyParameters.cs" />
-    <Compile Include="Api\SpreedlySubscriberClient.cs" />
+    <Compile Include="Api\SpreedlyV4Api.cs" />
     <Compile Include="Client\IRequestBuilder.cs" />
     <Compile Include="Client\ISpreedlyClient.cs" />
     <Compile Include="Client\IStatusResolver.cs" />

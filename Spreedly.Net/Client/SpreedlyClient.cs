@@ -17,8 +17,8 @@
 
         private const string BaseSpreedlyUrl = "https://spreedly.com";
 
-        public SpreedlyClient(string username, string password, string apiVersion)
-            :this(username, password, new SpreedlyRequestBuilder(apiVersion), new StatusResolver())
+        public SpreedlyClient(string username, string password, string siteName)
+            :this(username, password, new SpreedlyRequestBuilder(siteName), new StatusResolver())
         {
         }
 

@@ -1,29 +1,30 @@
 ﻿namespace Spreedly.Net.Entities
 {
     using System;
-    using RestSharp.Serializers;
+    using System.Xml.Serialization;
 
-    [SerializeAs(NameStyle = NameStyle.LowerCase)]
+    [XmlRoot(ElementName = "credit-card")]
     public class CreditCard
     {
+        [XmlElement(ElementName="number")]
         public string Number { get; set; }
         
-        [SerializeAs(Name = "verification-value")]
+        [XmlElement(ElementName = "verification-value")]
         public string VerificationValue { get; set; }
 
-        [SerializeAs(Name = "month")]
+        [XmlElement(ElementName = "month")]
         public int ExpirationMonth { get; set; }
         
-        [SerializeAs(Name = "year")]
+        [XmlElement(ElementName = "year")]
         public int ExpirationYear { get; set; }
         
-        [SerializeAs(Name = "first-name")]
+        [XmlElement(ElementName = "first-name")]
         public string FirstName { get; set; }
         
-        [SerializeAs(Name = "last-name")]
+        [XmlElement(ElementName = "last-name")]
         public string LastName { get; set; }
         
-        [SerializeAs(Name = "card-type")]
+        [XmlElement(ElementName = "card-type")]
         public string CardType
         {
             get { return _cardType; }

@@ -1,14 +1,14 @@
 ﻿namespace Spreedly.Net.Entities
 {
-    using RestSharp.Serializers;
-
-    [SerializeAs(NameStyle = NameStyle.LowerCase)]
+    using System.Xml.Serialization;
+    
+    [XmlRoot(ElementName="payment")]
     public class Payment
     {
-        [SerializeAs(Name = "account-type")]
+        [XmlElement(ElementName = "account-type")]
         public string AccountType { get; set; }
 
-        [SerializeAs(Name = "credit-card")]
+        [XmlElement(ElementName = "credit-card")]
         public CreditCard CreditCard { get; set; }
     }
 }

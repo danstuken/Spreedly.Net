@@ -3,17 +3,24 @@
     using Client;
     using Entities;
 
-    public class SpreedlySubscriberClient: ISpreedlySubscribers
+    public class SpreedlyV4Api: ISpreedlyInvoices, ISpreedlySubscribers, ISpreedlySubscriptionPlans
     {
         private ISpreedlyClient _client;
 
-        public SpreedlySubscriberClient(ISpreedlyParameters parameters): this(GetSpreedlyClient(parameters))
-        {
-        }
-
-        public SpreedlySubscriberClient(ISpreedlyClient client)
+        internal SpreedlyV4Api(ISpreedlyClient client)
         {
             _client = client;
+        }
+
+        public SpreedlyResponse<Invoice> CreateInvoice(Invoice invoice)
+        {
+            return _client.Post("invoices.xml", invoice);
+        }
+
+        public SpreedlyResponse<Invoice> PayInvoice(Invoice invoice, Payment payment)
+        {
+            var urlSegment = string.Format("invoices/{0}/pay.xml", invoice.SubscriptionPlanId);
+            return _client.Put<Payment, Invoice>(urlSegment, payment);
         }
 
         public SpreedlyResponse<SubscriberList> GetSubscribers()
@@ -51,11 +58,9 @@
             return _client.Delete("subscribers.xml");
         }
 
-        private static SpreedlyClient GetSpreedlyClient(ISpreedlyParameters parameters)
+        public SpreedlyResponse<SubscriptionPlanList> GetSubscriptionPlans()
         {
-            return new SpreedlyClient(parameters.ApiKey, "X",
-                                      new SpreedlyRequestBuilder(parameters.ApiVersion, parameters.SiteName),
-                                      new StatusResolver());
+            return _client.Get<SubscriptionPlanList>("subscription_plans.xml");
         }
     }
 }
