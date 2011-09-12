@@ -5,7 +5,7 @@
     using System.Xml.Serialization;
     using RestSharp.Serializers;
 
-    public class FrameworkSerializer: ISerializer
+    internal class FrameworkSerializer: ISerializer
     {
         public string Serialize(object obj)
         {

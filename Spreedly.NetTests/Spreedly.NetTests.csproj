@@ -67,11 +67,6 @@
     <Compile Include="IntegrationTests\RequestIntegrationTests.cs" />
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProviderTests\SerialiseSpike\FrameworkDeserialiser.cs" />
-    <Compile Include="ProviderTests\SerialiseSpike\FrameworkSerializer.cs" />
-    <Compile Include="ProviderTests\SerialiseSpike\SerializableNullable.cs" />
-    <Compile Include="ProviderTests\SerialiseSpike\Subscriber.cs" />
-    <Compile Include="ProviderTests\SerialiseSpike\XmlSerialiseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -83,7 +78,9 @@
       <Name>Spreedly.Net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ProviderTests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,19 +5,19 @@
     using RestSharp.Serializers;
     using Xml;
 
-    public class SpreedlyRequestBuilder: IRequestBuilder
+    internal class SpreedlyRequestBuilder: IRequestBuilder
     {
         private string _apiVersion;
         private string _siteName;
 
         private const string DefaultAPIVersion = "v4";
 
-        public SpreedlyRequestBuilder(string siteName)
+        internal SpreedlyRequestBuilder(string siteName)
             :this(DefaultAPIVersion, siteName)
         {
         }
 
-        public SpreedlyRequestBuilder(string apiVersion, string siteName)
+        internal SpreedlyRequestBuilder(string apiVersion, string siteName)
         {
             _apiVersion = apiVersion;
             _siteName = siteName;

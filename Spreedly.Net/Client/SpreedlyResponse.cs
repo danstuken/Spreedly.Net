@@ -1,7 +1,6 @@
 ﻿namespace Spreedly.Net.Client
 {
     using System;
-    using RestSharp;
 
     public class SpreedlyResponse
     {

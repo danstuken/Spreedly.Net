@@ -6,14 +6,13 @@
     using RestSharp;
     using RestSharp.Deserializers;
 
-    public class FrameworkDeserializer: IDeserializer
+    internal class FrameworkDeserializer: IDeserializer
     {
         public T Deserialize<T>(RestResponse response) where T : new()
         {
             if (response == null || response.Content == null)
                 return default(T);
 
-            XmlDocument doc;
             return Deserialize<T>(XmlReader.Create(new StringReader(response.Content)));
         }
 

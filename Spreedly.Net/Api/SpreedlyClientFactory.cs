@@ -26,5 +26,10 @@
         {
             return _spreedlyV4Client;
         }
+
+        public ISpreedlyTest GetTestClient()
+        {
+            return _spreedlyV4Client;
+        }
     }
 }

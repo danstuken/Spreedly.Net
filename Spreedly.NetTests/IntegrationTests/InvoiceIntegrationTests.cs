@@ -12,17 +12,18 @@
         private string _siteName = "sitedocdan-test";
 
         private ISpreedlySubscribers _subscribers;
+        private SpreedlyClientFactory _factory;
 
         [TestFixtureSetUp]
         public void init()
         {
-            SpreedlyClientFactory factory = new SpreedlyClientFactory(new SpreedlyParameters
-                                                                          {
-                                                                              ApiKey = _apiKey,
-                                                                              ApiVersion = _apiVersion,
-                                                                              SiteName = _siteName
-                                                                          });
-            _subscribers = factory.GetSubscribersClient();
+            _factory = new SpreedlyClientFactory(new SpreedlyParameters
+                                                     {
+                                                         ApiKey = _apiKey,
+                                                         ApiVersion = _apiVersion,
+                                                         SiteName = _siteName
+                                                     });
+            _subscribers = _factory.GetSubscribersClient();
 
             var newSubscriber = new Subscriber
                                     {
@@ -41,7 +42,7 @@
         [TestFixtureTearDown]
         public void IntegrationTearDown()
         {
-            _subscribers.DeleteAllSubscribers();
+            _factory.GetTestClient().DeleteAllSubscribers();
         }
     }
 }

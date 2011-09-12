@@ -3,7 +3,7 @@
     using System;
     using RestSharp;
 
-    public class StatusResolver: IStatusResolver
+    internal class StatusResolver: IStatusResolver
     {
         public SpreedlyStatus Resolve(Parameter statusHeader)
         {

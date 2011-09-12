@@ -6,7 +6,7 @@
     using System.Linq;
     using Xml;
 
-    public class SpreedlyClient: ISpreedlyClient
+    internal class SpreedlyClient: ISpreedlyClient
     {
         private string _userName;
         private string _password;
@@ -17,12 +17,12 @@
 
         private const string BaseSpreedlyUrl = "https://spreedly.com";
 
-        public SpreedlyClient(string username, string password, string siteName)
+        internal SpreedlyClient(string username, string password, string siteName)
             :this(username, password, new SpreedlyRequestBuilder(siteName), new StatusResolver())
         {
         }
 
-        public SpreedlyClient(string username, string password, IRequestBuilder requestBuilder, IStatusResolver statusResolver)
+        internal SpreedlyClient(string username, string password, IRequestBuilder requestBuilder, IStatusResolver statusResolver)
         {
             _userName = username;
             _password = password;
@@ -78,7 +78,7 @@
                     Error = ex
                 };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -102,7 +102,7 @@
                                Error = ex
                            };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
