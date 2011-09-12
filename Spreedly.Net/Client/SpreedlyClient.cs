@@ -31,27 +31,32 @@
             _restClient = GetClient();
         }
 
-        public SpreedlyResponse<TEntity> Get<TEntity>(string urlActionSegment) where TEntity: new()
+        public SpreedlyResponse<TGet> Get<TGet>(string urlActionSegment) where TGet: new()
         {
-            return TryRequest<TEntity>(_requestBuilder.BuildGetRequest(urlActionSegment));
+            return TryRequest<TGet>(_requestBuilder.BuildGetRequest(urlActionSegment));
         }
 
-        public SpreedlyResponse<TEntity> Post<TEntity>(string urlActionSegment, TEntity postObject) where TEntity : new()
+        public SpreedlyResponse Post(string urlActionSegment)
         {
-            return Post<TEntity,TEntity>(urlActionSegment, postObject);
+            return TryRequest(_requestBuilder.BuildPostRequest(urlActionSegment, null));
         }
 
-        public SpreedlyResponse<TResponse> Post<TPost, TResponse>(string urlActionSegment, TPost postObject) where TResponse : new()
+        public SpreedlyResponse Post(string urlActionSegment, object postObject)
+        {
+            return TryRequest(_requestBuilder.BuildPostRequest(urlActionSegment, postObject));
+        }
+
+        public SpreedlyResponse<TResponse> Post<TResponse>(string urlActionSegment, object postObject) where TResponse : new()
         {
             return TryRequest<TResponse>(_requestBuilder.BuildPostRequest(urlActionSegment, postObject));
         }
 
-        public SpreedlyResponse<TEntity> Put<TEntity>(string urlActionSegment, TEntity putObject) where TEntity : new()
+        public SpreedlyResponse<TResponse> Post<TResponse>(string urlActionSegment) where TResponse : new()
         {
-            return Put<TEntity, TEntity>(urlActionSegment, putObject);
+            return TryRequest<TResponse>(_requestBuilder.BuildPostRequest(urlActionSegment, null));
         }
 
-        public SpreedlyResponse<TResponse> Put<TPut, TResponse>(string urlActionSegment, TPut putObject) where TResponse : new()
+        public SpreedlyResponse<TResponse> Put<TResponse>(string urlActionSegment, object putObject) where TResponse : new()
         {
             return TryRequest<TResponse>(_requestBuilder.BuildPutRequest(urlActionSegment, putObject));
         }
