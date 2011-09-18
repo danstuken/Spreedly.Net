@@ -8,23 +8,23 @@
 
     public struct SerializableNullable<T> : IXmlSerializable, IEquatable<SerializableNullable<T>> where T : struct
     {
-        private T value;
-        private bool hasValue;
+        private T _value;
+        private bool _hasValue;
 
         private SerializableNullable(T value)
         {
-            hasValue = true;
-            this.value = value;
+            _hasValue = true;
+            _value = value;
         }
 
         public bool HasValue
         {
-            get { return hasValue; }
+            get { return _hasValue; }
         }
 
         public T Value
         {
-            get { return value; }
+            get { return _value; }
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -45,7 +45,7 @@
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             if(HasValue)
-                writer.WriteValue(value);
+                writer.WriteValue(_value);
         }
 
         public bool ShouldSerialize()
@@ -53,18 +53,25 @@
             return HasValue;
         }
 
+        public string ToString()
+        {
+            if (HasValue)
+                return Value.ToString();
+            return string.Empty;
+        }
+
         private void ReadNullValue()
         {
-            hasValue = false;
+            _hasValue = false;
         }
 
         private void ReadNonNullValue(XmlReader reader)
         {
             reader.ReadStartElement();
             var s = reader.ReadString();
-            value = GetValue(s);
+            _value = GetValue(s);
             reader.ReadEndElement();
-            hasValue = true;
+            _hasValue = true;
         }
 
         private T GetValue(string readValue)

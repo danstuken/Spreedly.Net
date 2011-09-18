@@ -19,7 +19,7 @@
 
         public SpreedlyResponse<Invoice> PayInvoice(Invoice invoice, Payment payment)
         {
-            var urlSegment = string.Format("invoices/{0}/pay.xml", invoice.SubscriptionPlanId);
+            var urlSegment = string.Format("invoices/{0}/pay.xml", invoice.Token);
             return _client.Put<Invoice>(urlSegment, payment);
         }
 
