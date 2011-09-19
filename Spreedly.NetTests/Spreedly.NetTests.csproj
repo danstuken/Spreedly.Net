@@ -66,6 +66,7 @@
     <Compile Include="IntegrationTests\InvoiceIntegrationTests.cs" />
     <Compile Include="IntegrationTests\RequestIntegrationTests.cs" />
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
+    <Compile Include="IntegrationTests\SubscriptionPlansIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
