@@ -37,6 +37,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Spreedly.Net\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.2.0.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\Spreedly.Net\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -63,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Deserialize\SubscriberListTests.cs" />
     <Compile Include="Deserialize\SubscriptionPlanListTests.cs" />
+    <Compile Include="HelperTests\SubscriberHelperTests.cs" />
     <Compile Include="IntegrationTests\InvoiceIntegrationTests.cs" />
     <Compile Include="IntegrationTests\RequestIntegrationTests.cs" />
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
