@@ -7,9 +7,6 @@
 
     public class SubscriberIntegrationTests
     {
-        private string _apiKey = "61a2304391b862d526e95f11ee7a3815f0857e3f";
-        private string _siteName = "sitedocdan-test";
-
         private ISpreedlySubscribers _subscribers;
         private SpreedlyClientFactory _factory;
 
@@ -18,8 +15,8 @@
         {
             _factory = new SpreedlyClientFactory(new SpreedlyParameters
                                                     {
-                                                        ApiKey = _apiKey,
-                                                        SiteName = _siteName
+                                                        ApiKey = TestConstants.TestApiKey,
+                                                        SiteName = TestConstants.TestSiteName
                                                     });
 
             _subscribers = _factory.GetSubscribersClient();

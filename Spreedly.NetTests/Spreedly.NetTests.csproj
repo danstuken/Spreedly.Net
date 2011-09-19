@@ -68,6 +68,7 @@
     <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
     <Compile Include="IntegrationTests\SubscriptionPlansIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
