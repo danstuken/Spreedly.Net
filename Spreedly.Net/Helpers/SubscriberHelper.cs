@@ -61,59 +61,60 @@
 
         public Invoice SubscribeToSubscriptionPlanWithCreditCard(Subscriber subscriber, string featureLevel, CreditCard creditCard)
         {
-            var plans = _subscriptionPlansClient.GetSubscriptionPlans();
-            var featureLevelPlan = plans.Entity.SubscriptionPlans.FirstOrDefault(p => p.FeatureLevel == featureLevel);
-            
+            var featureLevelPlan = GetPlanFromFeatureLevel(featureLevel);
             if(featureLevelPlan == null)
                 throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", featureLevel), null);
 
-            var invoiceResponse = _invoicesClient.CreateInvoice(new Invoice
-                                                                    {
-                                                                        SubscriptionPlanId = featureLevelPlan.Id,
-                                                                        Subscriber = subscriber
-                                                                    });
-
-            if(invoiceResponse.Status != SpreedlyStatus.Created)
-                throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.Error);
-
-            var paidInvoiceResponse = _invoicesClient.PayInvoice(invoiceResponse.Entity, new Payment
-                                                                                             {
-                                                                                                 AccountType = "credit-card",
-                                                                                                 CreditCard = creditCard
-                                                                                             });
-            if(paidInvoiceResponse.Status != SpreedlyStatus.Ok)
-                throw new SubscriberHelperException("Error closing subscription invoice", invoiceResponse.Error);
-
-            return paidInvoiceResponse.Entity;
+            var invoice = CreateInvoice(featureLevelPlan.Id.Value, subscriber);
+            var paidInvoiceResponse = PayInvoice(invoice, new Payment
+                                                              {
+                                                                  AccountType = "credit-card",
+                                                                  CreditCard = creditCard
+                                                              });
+            return paidInvoiceResponse;
         }
 
         public Invoice ChangeSubscriberFeatureLevelWithOnFilePayment(Subscriber subscriber, string newFeatureLevel)
         {
-            var plans = _subscriptionPlansClient.GetSubscriptionPlans();
-            var featureLevelPlan = plans.Entity.SubscriptionPlans.FirstOrDefault(p => p.FeatureLevel == newFeatureLevel);
-
+            var featureLevelPlan = GetPlanFromFeatureLevel(newFeatureLevel);
             if (featureLevelPlan == null)
                 throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", newFeatureLevel), null);
 
+            var invoice = CreateInvoice(featureLevelPlan.Id.Value, subscriber);
+            var paidInvoiceResponse = PayInvoice(invoice, new Payment
+                                                              {
+                                                                  AccountType = "on-file"
+                                                              });
+            return paidInvoiceResponse;
+        }
+
+
+        private SubscriptionPlan GetPlanFromFeatureLevel(string featureLevel)
+        {
+            var plans = _subscriptionPlansClient.GetSubscriptionPlans();
+            return plans.Entity.SubscriptionPlans.FirstOrDefault(p => p.FeatureLevel == featureLevel);
+        }
+
+        private Invoice CreateInvoice(int featureLevelPlanId, Subscriber subscriber)
+        {
             var invoiceResponse = _invoicesClient.CreateInvoice(new Invoice
                                                                     {
-                                                                        SubscriptionPlanId = featureLevelPlan.Id,
+                                                                        SubscriptionPlanId = featureLevelPlanId,
                                                                         Subscriber = subscriber
                                                                     });
 
             if (invoiceResponse.Status != SpreedlyStatus.Created)
                 throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.Error);
 
-            var paidInvoiceResponse = _invoicesClient.PayInvoice(invoiceResponse.Entity, new Payment
-                                                                                             {
-                                                                                                 AccountType = "on-file"
-                                                                                             });
-
-            if (paidInvoiceResponse.Status != SpreedlyStatus.Ok)
-                throw new SubscriberHelperException("Error closing subscription invoice", invoiceResponse.Error);
-
-            return paidInvoiceResponse.Entity;
+            return invoiceResponse.Entity;
         }
 
+        private Invoice PayInvoice(Invoice invoice, Payment payment)
+        {
+            var paidInvoiceResponse = _invoicesClient.PayInvoice(invoice, payment);
+            if (paidInvoiceResponse.Status != SpreedlyStatus.Ok)
+                throw new SubscriberHelperException("Error closing subscription invoice", paidInvoiceResponse.Error);
+            return paidInvoiceResponse.Entity;
+        }
     }
 }
