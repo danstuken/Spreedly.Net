@@ -8,7 +8,6 @@
     public class InvoiceIntegrationTests
     {
         private string _apiKey = "61a2304391b862d526e95f11ee7a3815f0857e3f";
-        private string _apiVersion = "v4";
         private string _siteName = "sitedocdan-test";
 
         private ISpreedlySubscribers _subscribers;
@@ -21,7 +20,6 @@
             _factory = new SpreedlyClientFactory(new SpreedlyParameters
                                                      {
                                                          ApiKey = _apiKey,
-                                                         ApiVersion = _apiVersion,
                                                          SiteName = _siteName
                                                      });
             _subscribers = _factory.GetSubscribersClient();

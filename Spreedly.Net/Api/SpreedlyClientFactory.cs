@@ -6,9 +6,13 @@
     {
         private SpreedlyV4Api _spreedlyCaller;
 
-        public SpreedlyClientFactory(ISpreedlyParameters parameters)
+        public SpreedlyClientFactory(ISpreedlyParameters parameters): this(parameters.ApiKey, parameters.SiteName)
         {
-            var client = new SpreedlyClient(parameters.ApiKey, "X", new SpreedlyRequestBuilder(parameters.ApiVersion, parameters.SiteName), new StatusResolver());
+        }
+
+        public SpreedlyClientFactory(string apiKey, string siteName)
+        {
+            var client = new SpreedlyClient(apiKey, "X", new SpreedlyRequestBuilder(siteName), new StatusResolver());
             _spreedlyCaller = new SpreedlyV4Api(client);
         }
 
