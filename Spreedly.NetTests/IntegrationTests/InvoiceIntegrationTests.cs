@@ -4,6 +4,7 @@
     using Net.Api;
     using Net.Client;
     using Net.Entities;
+    using Net.Helpers;
 
     public class InvoiceIntegrationTests
     {
@@ -66,6 +67,34 @@
 
             Assert.AreEqual(SpreedlyStatus.Ok, paymentResult.Status);
 
+        }
+
+        [Test]
+        public void CreateSubscription_WithHelper_ReturnsInvoice()
+        {
+            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
+
+            var subscriber = new Subscriber
+                                 {
+                                     CustomerId = "TestCustomerId",
+                                     ScreenName = "TestCustomerId",
+                                     Email = "test@test.madeup"
+                                 };
+
+            var creditCard = new CreditCard
+                                 {
+                                     CardType = "visa",
+                                     ExpirationMonth = 12,
+                                     ExpirationYear = 2012,
+                                     FirstName = "Tester",
+                                     LastName = "Testing",
+                                     Number = "4222222222222",
+                                     VerificationValue = "123"
+                                 };
+
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
+
+            Assert.NotNull(invoice);
         }
 
         [TestFixtureTearDown]
