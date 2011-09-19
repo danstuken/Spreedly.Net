@@ -87,5 +87,33 @@
             return paidInvoiceResponse.Entity;
         }
 
+        public Invoice ChangeSubscriberFeatureLevelWithOnFilePayment(Subscriber subscriber, string newFeatureLevel)
+        {
+            var plans = _subscriptionPlansClient.GetSubscriptionPlans();
+            var featureLevelPlan = plans.Entity.SubscriptionPlans.FirstOrDefault(p => p.FeatureLevel == newFeatureLevel);
+
+            if (featureLevelPlan == null)
+                throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", newFeatureLevel), null);
+
+            var invoiceResponse = _invoicesClient.CreateInvoice(new Invoice
+                                                                    {
+                                                                        SubscriptionPlanId = featureLevelPlan.Id,
+                                                                        Subscriber = subscriber
+                                                                    });
+
+            if (invoiceResponse.Status != SpreedlyStatus.Created)
+                throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.Error);
+
+            var paidInvoiceResponse = _invoicesClient.PayInvoice(invoiceResponse.Entity, new Payment
+                                                                                             {
+                                                                                                 AccountType = "on-file"
+                                                                                             });
+
+            if (paidInvoiceResponse.Status != SpreedlyStatus.Ok)
+                throw new SubscriberHelperException("Error closing subscription invoice", invoiceResponse.Error);
+
+            return paidInvoiceResponse.Entity;
+        }
+
     }
 }

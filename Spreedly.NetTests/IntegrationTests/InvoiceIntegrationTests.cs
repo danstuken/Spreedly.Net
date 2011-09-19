@@ -12,7 +12,7 @@
         private ISpreedlyInvoices _invoices;
         private SpreedlyClientFactory _factory;
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void init()
         {
             _factory = new SpreedlyClientFactory(new SpreedlyParameters
@@ -94,10 +94,78 @@
 
             var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
 
+            var upgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber,
+                                                                                                "Sovereign (150)");
+
+            var downgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber,
+                                                                                                  "Magnum (10)");
+
             Assert.NotNull(invoice);
         }
 
-        [TestFixtureTearDown]
+        [Test]
+        public void UpgradeSubscription_ChargesProRatadAmount()
+        {
+            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
+
+            var subscriber = new Subscriber
+            {
+                CustomerId = "TestCustomerId",
+                ScreenName = "TestCustomerId",
+                Email = "test@test.madeup"
+            };
+
+            var creditCard = new CreditCard
+            {
+                CardType = "visa",
+                ExpirationMonth = 12,
+                ExpirationYear = 2012,
+                FirstName = "Tester",
+                LastName = "Testing",
+                Number = "4222222222222",
+                VerificationValue = "123"
+            };
+
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
+
+            var upgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Sovereign (150)");
+
+            Assert.AreEqual(15, upgradeInvoice.Amount.Value);
+        }
+
+        [Test]
+        public void DowngradeSubscription_GivesStoreCreditToSubscriber()
+        {
+            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
+
+            var subscriber = new Subscriber
+            {
+                CustomerId = "TestCustomerId",
+                ScreenName = "TestCustomerId",
+                Email = "test@test.madeup"
+            };
+
+            var creditCard = new CreditCard
+            {
+                CardType = "visa",
+                ExpirationMonth = 12,
+                ExpirationYear = 2012,
+                FirstName = "Tester",
+                LastName = "Testing",
+                Number = "4222222222222",
+                VerificationValue = "123"
+            };
+
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Sovereign (150)", creditCard);
+
+            var downgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Imperial (50)");
+
+            var downgradedSubscriber = subscriberHelper.FetchOrCreate(subscriber.CustomerId, "", "");
+
+            Assert.GreaterOrEqual(downgradedSubscriber.StoreCredit.Value, 0);
+        }
+
+        [TearDown]
         public void IntegrationTearDown()
         {
             _factory.GetTestClient().DeleteAllSubscribers();

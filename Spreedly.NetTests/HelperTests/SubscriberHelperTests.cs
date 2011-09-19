@@ -238,5 +238,44 @@
 
             Assert.NotNull(paidInvoice);
         }
+
+        [Test]
+        public void ChangingSubscriptionLevelWithOnFilePayment_PaysInvoiceUsingOnFile()
+        {
+            var existingFeatureLevel = "FeatureLevelExists";
+            var subscriber = new Subscriber
+            {
+                CustomerId = "Id"
+            };
+            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
+                                                                                  {
+                                                                                      Status = SpreedlyStatus.Ok,
+                                                                                      Entity = new SubscriptionPlanList
+                                                                                                   {
+                                                                                                       SubscriptionPlans = new List<SubscriptionPlan>
+                                                                                                               {
+                                                                                                                   new SubscriptionPlan
+                                                                                                                       {
+                                                                                                                           FeatureLevel = existingFeatureLevel
+                                                                                                                       }
+                                                                                                               }
+                                                                                                   }
+                                                                                  });
+            _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
+                                                                      {
+                                                                          Status = SpreedlyStatus.Created,
+                                                                          Entity = new Invoice()
+                                                                      });
+            _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
+                                                                         {
+                                                                             Status = SpreedlyStatus.Ok,
+                                                                             Entity = new Invoice()
+                                                                         });
+
+            _subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, existingFeatureLevel);
+
+            _paymentsClient.Received().PayInvoice(Arg.Any<Invoice>(),
+                                                  Arg.Is<Payment>(p => p.AccountType == "on-file"));
+        }
     }
 }
