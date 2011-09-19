@@ -1,6 +1,7 @@
 ﻿namespace Spreedly.NetTests.HelperTests
 {
     using System;
+    using System.Collections.Generic;
     using NSubstitute;
     using NUnit.Framework;
     using Net.Api;
@@ -11,20 +12,31 @@
     [TestFixture]
     public class SubscriberHelperTests
     {
-        
+        private SubscriberHelper _subscriberHelper;
+        private ISpreedlySubscribers _subscriberClient;
+        private ISpreedlyInvoices _paymentsClient;
+        private ISpreedlySubscriptionPlans _subscriptionPlansClient;
+
+        [SetUp]
+        public void Init()
+        {
+            _subscriberClient = Substitute.For<ISpreedlySubscribers>();
+            _subscriptionPlansClient = Substitute.For<ISpreedlySubscriptionPlans>();
+            _paymentsClient = Substitute.For<ISpreedlyInvoices>();
+            _subscriberHelper = new SubscriberHelper(_subscriberClient, _paymentsClient, _subscriptionPlansClient);
+        }
+ 
         [Test]
         public void ExistsReturnsTrue_ForExistingSubscriber()
         {
             var existingCustomerId = "IExist";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                              {
                                                                                                  Status = SpreedlyStatus.Ok,
                                                                                                  Entity = new Subscriber { CustomerId = existingCustomerId }
                                                                                              });
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
-
-            var exists = subscriberHelper.Exists(existingCustomerId);
+            
+            var exists = _subscriberHelper.Exists(existingCustomerId);
 
             Assert.True(exists);
         }
@@ -33,15 +45,13 @@
         public void ExistsReturnsFalse_ForNonExistingSubscriber()
         {
             var nonExistingCustomerId = "IDontExist";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                              {
                                                                                                  Status = SpreedlyStatus.NotFound,
                                                                                                  Entity = null
                                                                                              });
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
-
-            var exists = subscriberHelper.Exists(nonExistingCustomerId);
+            
+            var exists = _subscriberHelper.Exists(nonExistingCustomerId);
 
             Assert.False(exists);
         }
@@ -52,13 +62,12 @@
             var nonExistingCustomerId = "IDontExist";
             var anEmailAddress = "fred@fred.fred";
             var aScreenName = "FreddieFred";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                                   {
                                                                                                       Status = SpreedlyStatus.NotFound,
                                                                                                       Entity = null
                                                                                                   });
-            spreedlyClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                         {
                                                                             Status = SpreedlyStatus.Created,
                                                                             Entity = new Subscriber
@@ -68,11 +77,10 @@
                                                                                              ScreenName = aScreenName
                                                                                          }
                                                                         });
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
+            
+            var subscriber = _subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
 
-            var subscriber = subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
-
-            spreedlyClient.ReceivedWithAnyArgs().CreateSubscriber(null);
+            _subscriberClient.ReceivedWithAnyArgs().CreateSubscriber(null);
         }
 
         [Test]
@@ -81,13 +89,12 @@
             var nonExistingCustomerId = "IDontExist";
             var anEmailAddress = "fred@fred.fred";
             var aScreenName = "FreddieFred";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                             {
                                                                                                 Status = SpreedlyStatus.NotFound,
                                                                                                 Entity = null
                                                                                             });
-            spreedlyClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                     {
                                                                         Status = SpreedlyStatus.Created,
                                                                         Entity = new Subscriber
@@ -97,9 +104,8 @@
                                                                             ScreenName = aScreenName
                                                                         }
                                                                     });
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
-
-            var subscriber = subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
+            
+            var subscriber = _subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
 
             Assert.AreEqual(nonExistingCustomerId, subscriber.CustomerId);
         }
@@ -110,8 +116,7 @@
             var existingCustomerId = "IExist";
             var anEmailAddress = "fred@fred.fred";
             var aScreenName = "FreddieFred";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                             {
                                                                                                 Status = SpreedlyStatus.Ok,
                                                                                                 Entity = new Subscriber
@@ -121,12 +126,10 @@
                                                                                                     ScreenName = aScreenName
                                                                                                 }
                                                                                             });
+            
+            var subscriber = _subscriberHelper.FetchOrCreate(existingCustomerId, anEmailAddress, aScreenName);
 
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
-
-            var subscriber = subscriberHelper.FetchOrCreate(existingCustomerId, anEmailAddress, aScreenName);
-
-            spreedlyClient.DidNotReceiveWithAnyArgs().CreateSubscriber(null);
+            _subscriberClient.DidNotReceiveWithAnyArgs().CreateSubscriber(null);
         }
 
         [Test]
@@ -137,16 +140,14 @@
             var anEmailAddress = "fred@fred.fred";
             var aScreenName = "FreddieFred";
             var errorMessage = "Bad stuff occurred";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                                {
                                                                                                    Status = SpreedlyStatus.ServerError,
                                                                                                    Entity = null,
                                                                                                    Error = new Exception(errorMessage)
                                                                                                });
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
 
-            var subscriber = subscriberHelper.FetchOrCreate(existingCustomerId, anEmailAddress, aScreenName);
+            var subscriber = _subscriberHelper.FetchOrCreate(existingCustomerId, anEmailAddress, aScreenName);
         }
 
         [Test]
@@ -157,21 +158,85 @@
             var anEmailAddress = "fred@fred.fred";
             var aScreenName = "FreddieFred";
             var errorMessage = "Bad stuff occurred";
-            var spreedlyClient = Substitute.For<ISpreedlySubscribers>();
-            spreedlyClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                                             {
                                                                                                 Status = SpreedlyStatus.NotFound,
                                                                                                 Entity = null
                                                                                             });
-            spreedlyClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
                                                                     {
                                                                         Status = SpreedlyStatus.ServerError,
                                                                         Entity = null,
                                                                         Error =  new Exception(errorMessage)
                                                                     });
-            var subscriberHelper = new SubscriberHelper(spreedlyClient);
 
-            var subscriber = subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
+            var subscriber = _subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
+        }
+
+        [Test]
+        [ExpectedException(typeof(SubscriberHelperException))]
+        public void SubscribingSubscriber_ToNonExistantPlan_ThrowsSubscriberHelperException()
+        {
+            var nonExistingFeatureLevel = "FeatureLevelNoExist";
+            var subscriber = new Subscriber
+                                 {
+                                     CustomerId = "Id"
+                                 };
+            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
+                                                                                   {
+                                                                                       Status = SpreedlyStatus.Ok,
+                                                                                       Entity = new SubscriptionPlanList
+                                                                                                    {
+                                                                                                        SubscriptionPlans = new List<SubscriptionPlan>()
+                                                                                                    }
+            
+                                                                                   });
+            _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>());
+            _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>());
+
+            var paidInvoice = _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                                          nonExistingFeatureLevel,
+                                                                                          new CreditCard());
+        }
+
+        [Test]
+        public void SubscribingSubscriber_ToExistingPlan_ReturnsAnInvoice()
+        {
+            var existingFeatureLevel = "FeatureLevelExists";
+            var subscriber = new Subscriber
+                                 {
+                                     CustomerId = "Id"
+                                 };
+            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
+                                                                                {
+                                                                                    Status = SpreedlyStatus.Ok,
+                                                                                    Entity = new SubscriptionPlanList
+                                                                                    {
+                                                                                        SubscriptionPlans = new List<SubscriptionPlan>()
+                                                                                                                {
+                                                                                                                    new SubscriptionPlan
+                                                                                                                        {
+                                                                                                                            FeatureLevel = existingFeatureLevel
+                                                                                                                        }
+                                                                                                                }
+                                                                                    }
+                                                                                });
+            _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
+                                                                      {
+                                                                          Status = SpreedlyStatus.Created,
+                                                                          Entity = new Invoice()
+                                                                      });
+            _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
+                                                                         {
+                                                                             Status = SpreedlyStatus.Ok,
+                                                                             Entity = new Invoice()
+                                                                         });
+
+            var paidInvoice = _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                                          existingFeatureLevel,
+                                                                                          new CreditCard());
+
+            Assert.NotNull(paidInvoice);
         }
     }
 }
