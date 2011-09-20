@@ -118,6 +118,7 @@
             outResponse.Status = _statusResolver.Resolve(restResponse.Headers.FirstOrDefault(hdr => hdr.Type == ParameterType.HttpHeader && hdr.Name == "Status"));
             if (restResponse.ResponseStatus == ResponseStatus.Error)
                 outResponse.Error = restResponse.ErrorException;
+            outResponse.RawBody = restResponse.Content;
         }
 
         private RestClient GetClient()

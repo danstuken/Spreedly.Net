@@ -58,7 +58,7 @@
                                                        ExpirationYear = 2012,
                                                        FirstName = "Tester",
                                                        LastName = "Testing",
-                                                       Number = "4222222222222",
+                                                       Number = TestConstants.ValidCard,
                                                        VerificationValue = "123"
                                                    }
                               };
@@ -70,99 +70,39 @@
         }
 
         [Test]
-        public void CreateSubscription_WithHelper_ReturnsInvoice()
+        public void CreateInvoiceForUser_WithUnauthorisedCard_ReturnsForbiddenStatus()
         {
-            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
-
-            var subscriber = new Subscriber
-                                 {
-                                     CustomerId = "TestCustomerId",
-                                     ScreenName = "TestCustomerId",
-                                     Email = "test@test.madeup"
-                                 };
-
-            var creditCard = new CreditCard
-                                 {
-                                     CardType = "visa",
-                                     ExpirationMonth = 12,
-                                     ExpirationYear = 2012,
-                                     FirstName = "Tester",
-                                     LastName = "Testing",
-                                     Number = "4222222222222",
-                                     VerificationValue = "123"
-                                 };
-
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
-
-            var upgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber,
-                                                                                                "Sovereign (150)");
-
-            var downgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber,
-                                                                                                  "Magnum (10)");
-
-            Assert.NotNull(invoice);
-        }
-
-        [Test]
-        public void UpgradeSubscription_ChargesProRatadAmount()
-        {
-            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
-
-            var subscriber = new Subscriber
+            var invoice = _invoices.CreateInvoice(new Invoice
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
-                Email = "test@test.madeup"
+                SubscriptionPlanId = 14143,
+                Subscriber = new Subscriber
+                {
+                    CustomerId = "TestCustomerId",
+                    ScreenName = "TestCustomerId",
+                    Email = "test@test.madeup"
+                }
+            });
+
+            Assert.AreEqual(SpreedlyStatus.Created, invoice.Status);
+
+            var payment = new Payment
+            {
+                AccountType = "credit-card",
+                CreditCard = new CreditCard
+                {
+                    CardType = "visa",
+                    ExpirationMonth = 12,
+                    ExpirationYear = 2012,
+                    FirstName = "Tester",
+                    LastName = "Testing",
+                    Number = TestConstants.UnauthorisedCard,
+                    VerificationValue = "123"
+                }
             };
 
-            var creditCard = new CreditCard
-            {
-                CardType = "visa",
-                ExpirationMonth = 12,
-                ExpirationYear = 2012,
-                FirstName = "Tester",
-                LastName = "Testing",
-                Number = "4222222222222",
-                VerificationValue = "123"
-            };
+            var paymentResult = _invoices.PayInvoice(invoice.Entity, payment);
 
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
-
-            var upgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Sovereign (150)");
-
-            Assert.AreEqual(15, upgradeInvoice.Amount.Value);
-        }
-
-        [Test]
-        public void DowngradeSubscription_GivesStoreCreditToSubscriber()
-        {
-            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
-
-            var subscriber = new Subscriber
-            {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
-                Email = "test@test.madeup"
-            };
-
-            var creditCard = new CreditCard
-            {
-                CardType = "visa",
-                ExpirationMonth = 12,
-                ExpirationYear = 2012,
-                FirstName = "Tester",
-                LastName = "Testing",
-                Number = "4222222222222",
-                VerificationValue = "123"
-            };
-
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Sovereign (150)", creditCard);
-
-            var downgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Imperial (50)");
-
-            var downgradedSubscriber = subscriberHelper.FetchOrCreate(subscriber.CustomerId, "", "");
-
-            Assert.GreaterOrEqual(downgradedSubscriber.StoreCredit.Value, 0);
+            Assert.AreEqual(SpreedlyStatus.Forbidden, paymentResult.Status);
         }
 
         [TearDown]

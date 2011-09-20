@@ -74,9 +74,11 @@
     <Compile Include="Entities\SubscriberList.cs" />
     <Compile Include="Entities\SubscriptionPlan.cs" />
     <Compile Include="Entities\SubscriptionPlanList.cs" />
-    <Compile Include="Helpers\HelperException.cs" />
+    <Compile Include="Helpers\Exceptions\ForbiddenActionException.cs" />
+    <Compile Include="Helpers\Exceptions\PaymentGatewayTimeoutException.cs" />
+    <Compile Include="Helpers\Exceptions\SubscriberHelperException.cs" />
+    <Compile Include="Helpers\Exceptions\UnprocessableEntityException.cs" />
     <Compile Include="Helpers\SubscriberHelper.cs" />
-    <Compile Include="Helpers\SubscriberHelperException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xml\FrameworkDeserializer.cs" />
     <Compile Include="Xml\FrameworkSerializer.cs" />

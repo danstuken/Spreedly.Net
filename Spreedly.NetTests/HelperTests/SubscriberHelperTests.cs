@@ -8,6 +8,7 @@
     using Net.Client;
     using Net.Entities;
     using Net.Helpers;
+    using Net.Helpers.Exceptions;
 
     [TestFixture]
     public class SubscriberHelperTests

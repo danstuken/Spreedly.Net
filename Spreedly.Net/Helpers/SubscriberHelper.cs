@@ -4,6 +4,7 @@
     using Api;
     using Client;
     using Entities;
+    using Exceptions;
 
     public class SubscriberHelper
     {
@@ -12,17 +13,18 @@
         private ISpreedlySubscriptionPlans _subscriptionPlansClient;
 
         private static SpreedlyClientFactory _cachedClientFactory;
-        private static T  GetBadClientCaller<T>(string siteName, string apiKey)
+        private static T GetBadClientCaller<T>(string siteName, string apiKey)
         {
-            if(_cachedClientFactory == null)
+            if (_cachedClientFactory == null)
                 _cachedClientFactory = new SpreedlyClientFactory(apiKey, siteName);
             return _cachedClientFactory.GetClient<T>();
         }
 
-        public SubscriberHelper(string siteName, string apiKey): this(
-            GetBadClientCaller<ISpreedlySubscribers>(siteName, apiKey), 
-            GetBadClientCaller<ISpreedlyInvoices>(siteName, apiKey), 
-            GetBadClientCaller<ISpreedlySubscriptionPlans>(siteName, apiKey))
+        public SubscriberHelper(string siteName, string apiKey)
+            : this(
+                GetBadClientCaller<ISpreedlySubscribers>(siteName, apiKey),
+                GetBadClientCaller<ISpreedlyInvoices>(siteName, apiKey),
+                GetBadClientCaller<ISpreedlySubscriptionPlans>(siteName, apiKey))
         {
         }
 
@@ -44,33 +46,33 @@
             var subscriber = _subscribersClient.GetSubscriberByCustomerId(customerId);
             if (subscriber.Status == SpreedlyStatus.Ok)
                 return subscriber.Entity;
-            if(subscriber.Status != SpreedlyStatus.NotFound)
-                throw new SubscriberHelperException(string.Format("Unexpected error fetching subscriber {0}", customerId), subscriber.Error);
+            if (subscriber.Status != SpreedlyStatus.NotFound)
+                throw new SubscriberHelperException(string.Format("Unexpected error fetching subscriber {0}", customerId), subscriber.RawBody, subscriber.Error);
 
             subscriber = _subscribersClient.CreateSubscriber(new Subscriber
-                                                                 {
-                                                                     CustomerId = customerId,
-                                                                     Email = emailAddress,
-                                                                     ScreenName = screenName
-                                                                 });
+            {
+                CustomerId = customerId,
+                Email = emailAddress,
+                ScreenName = screenName
+            });
 
-            if(subscriber.Status != SpreedlyStatus.Created)
-                throw new SubscriberHelperException(string.Format("Unexpected error creating subscriber {0}", customerId), subscriber.Error);
+            if (subscriber.Status != SpreedlyStatus.Created)
+                throw new SubscriberHelperException(string.Format("Unexpected error creating subscriber {0}", customerId), subscriber.RawBody, subscriber.Error);
             return subscriber.Entity;
         }
 
         public Invoice SubscribeToSubscriptionPlanWithCreditCard(Subscriber subscriber, string featureLevel, CreditCard creditCard)
         {
             var featureLevelPlan = GetPlanFromFeatureLevel(featureLevel);
-            if(featureLevelPlan == null)
+            if (featureLevelPlan == null)
                 throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", featureLevel), null);
 
             var invoice = CreateInvoice(featureLevelPlan.Id.Value, subscriber);
             var paidInvoiceResponse = PayInvoice(invoice, new Payment
-                                                              {
-                                                                  AccountType = "credit-card",
-                                                                  CreditCard = creditCard
-                                                              });
+            {
+                AccountType = "credit-card",
+                CreditCard = creditCard
+            });
             return paidInvoiceResponse;
         }
 
@@ -82,9 +84,9 @@
 
             var invoice = CreateInvoice(featureLevelPlan.Id.Value, subscriber);
             var paidInvoiceResponse = PayInvoice(invoice, new Payment
-                                                              {
-                                                                  AccountType = "on-file"
-                                                              });
+            {
+                AccountType = "on-file"
+            });
             return paidInvoiceResponse;
         }
 
@@ -98,13 +100,13 @@
         private Invoice CreateInvoice(int featureLevelPlanId, Subscriber subscriber)
         {
             var invoiceResponse = _invoicesClient.CreateInvoice(new Invoice
-                                                                    {
-                                                                        SubscriptionPlanId = featureLevelPlanId,
-                                                                        Subscriber = subscriber
-                                                                    });
+            {
+                SubscriptionPlanId = featureLevelPlanId,
+                Subscriber = subscriber
+            });
 
             if (invoiceResponse.Status != SpreedlyStatus.Created)
-                throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.Error);
+                throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.RawBody, invoiceResponse.Error);
 
             return invoiceResponse.Entity;
         }
@@ -112,8 +114,17 @@
         private Invoice PayInvoice(Invoice invoice, Payment payment)
         {
             var paidInvoiceResponse = _invoicesClient.PayInvoice(invoice, payment);
+            if (paidInvoiceResponse.Status == SpreedlyStatus.Forbidden)
+                throw new ForbiddenActionException(string.Format("Error paying invoice {0}", invoice.Token),
+                                                   paidInvoiceResponse.RawBody);
+            if (paidInvoiceResponse.Status == SpreedlyStatus.UnprocessableEntity)
+                throw new UnprocessableEntityException(string.Format("Error paying invoice {0}", invoice.Token),
+                                                       paidInvoiceResponse.RawBody);
+            if (paidInvoiceResponse.Status == SpreedlyStatus.GatewayTimeout)
+                throw new PaymentGatewayTimeoutException(string.Format("Payment gateway timed out during payment of invoice {0}", invoice.Token));
             if (paidInvoiceResponse.Status != SpreedlyStatus.Ok)
-                throw new SubscriberHelperException("Error closing subscription invoice", paidInvoiceResponse.Error);
+                throw new SubscriberHelperException("Error closing subscription invoice", paidInvoiceResponse.RawBody, paidInvoiceResponse.Error);
+            
             return paidInvoiceResponse.Entity;
         }
     }
