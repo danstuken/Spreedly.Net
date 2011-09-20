@@ -75,6 +75,7 @@
     <Compile Include="Entities\SubscriptionPlan.cs" />
     <Compile Include="Entities\SubscriptionPlanList.cs" />
     <Compile Include="Helpers\Exceptions\ForbiddenActionException.cs" />
+    <Compile Include="Helpers\Exceptions\NotFoundException.cs" />
     <Compile Include="Helpers\Exceptions\PaymentGatewayTimeoutException.cs" />
     <Compile Include="Helpers\Exceptions\SubscriberHelperException.cs" />
     <Compile Include="Helpers\Exceptions\UnprocessableEntityException.cs" />

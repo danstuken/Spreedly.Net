@@ -1,6 +1,7 @@
 ﻿namespace Spreedly.Net.Xml
 {
     using System.IO;
+    using System.Net;
     using System.Xml;
     using System.Xml.Serialization;
     using RestSharp;
@@ -10,7 +11,7 @@
     {
         public T Deserialize<T>(RestResponse response) where T : new()
         {
-            if (response == null || response.Content == null)
+            if (response == null || response.Content == null || (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK))
                 return default(T);
 
             return Deserialize<T>(XmlReader.Create(new StringReader(response.Content)));

@@ -139,5 +139,30 @@
 
             var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
         }
+
+        [Test]
+        [ExpectedException(typeof(ForbiddenActionException))]
+        public void CreateSubscription_WithHelper_ForFreeSubscriptionPlan_ThrowsForbiddenActionException()
+        {
+            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
+            var subscriber = new Subscriber
+            {
+                CustomerId = "TestCustomerId",
+                ScreenName = "TestCustomerId",
+                Email = "test@test.madeup"
+            };
+            var creditCard = new CreditCard
+            {
+                CardType = "visa",
+                ExpirationMonth = 12,
+                ExpirationYear = 2012,
+                FirstName = "Tester",
+                LastName = "Testing",
+                Number = TestConstants.ValidCard,
+                VerificationValue = "123"
+            };
+
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Freebie", creditCard);
+        }
     }
 }

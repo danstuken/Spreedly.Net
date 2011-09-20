@@ -90,6 +90,27 @@
             return paidInvoiceResponse;
         }
 
+        public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, string freeTrialFeatureLevel)
+        {
+            var freePlan = GetPlanFromFeatureLevel(freeTrialFeatureLevel);
+            if(freePlan == null)
+                throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", freeTrialFeatureLevel), null);
+
+            var subscribedSubscriber = _subscribersClient.SubscribeSubscriberToFreeTrial(subscriber.CustomerId, freePlan);
+
+            if(subscribedSubscriber.Status == SpreedlyStatus.NotFound)
+                throw new NotFoundException(string.Format("Failed to subscribe subscriber with customer id {0} to free plan. Subscriber not found.", subscriber.CustomerId));
+
+            if(subscribedSubscriber.Status == SpreedlyStatus.UnprocessableEntity)
+                throw new UnprocessableEntityException(string.Format("Failed to subscribe subscriber with customer id {0} to plan. Bad entity sent", subscriber.CustomerId), 
+                    subscribedSubscriber.RawBody);
+
+            if(subscribedSubscriber.Status == SpreedlyStatus.Forbidden)
+                throw new ForbiddenActionException(string.Format("Failed to subscribe subscriber with customer id {0} to plan. Forbidden for this plan or subscriber", 
+                    subscriber.CustomerId), subscribedSubscriber.RawBody);
+
+            return subscribedSubscriber.Entity;
+        }
 
         private SubscriptionPlan GetPlanFromFeatureLevel(string featureLevel)
         {
@@ -105,6 +126,12 @@
                 Subscriber = subscriber
             });
 
+            if(invoiceResponse.Status == SpreedlyStatus.Forbidden)
+                throw new ForbiddenActionException(string.Format("Failed to create invoice for subscription plan with id, {0}", featureLevelPlanId), invoiceResponse.RawBody);
+            if(invoiceResponse.Status == SpreedlyStatus.NotFound)
+                throw new NotFoundException(string.Format("Failed to create invoice. No plan found for id {0}", featureLevelPlanId));
+            if(invoiceResponse.Status == SpreedlyStatus.UnprocessableEntity)
+                throw new UnprocessableEntityException(string.Format("Failed to create invoice for subscription plan with id {0}", featureLevelPlanId), invoiceResponse.RawBody);
             if (invoiceResponse.Status != SpreedlyStatus.Created)
                 throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.RawBody, invoiceResponse.Error);
 
