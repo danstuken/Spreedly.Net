@@ -4,9 +4,9 @@
     using System.Linq;
     using System.Xml;
     using System.Xml.Serialization;
-    using ExpressionToCodeLib;
     using NUnit.Framework;
     using Net.Entities;
+    using Shouldly;
 
     public class SubscriberListTests
     {
@@ -91,11 +91,7 @@
         public void Deserializing_NonEmptyList_ReturnsExpectedSubscribers()
         {
             var subscriberList = (SubscriberList)_serializer.Deserialize(XmlReader.Create(new StringReader(xmlList)));
-
-            PAssert.That(
-                () =>
-                subscriberList.Subscribers.OrderBy(s => s.CustomerId).Select(s => s.CustomerId).Aggregate(string.Empty, (accum, item) => accum + "," + item)
-                == ",001,2095,88225,aef789956af61024d82ec270039601b91e06262a");
+            (subscriberList.Subscribers.OrderBy(s => s.CustomerId).Select(s => s.CustomerId).Aggregate(string.Empty, (accum, item) => accum + "," + item)).ShouldBe(",001,2095,88225,aef789956af61024d82ec270039601b91e06262a");
         }
     }
 }
