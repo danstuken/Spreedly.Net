@@ -1,6 +1,7 @@
 ﻿namespace Spreedly.NetTests.IntegrationTests
 {
     using NUnit.Framework;
+    using Net.Api;
     using Net.Entities;
     using Net.Helpers;
     using Net.Helpers.Exceptions;
@@ -85,7 +86,7 @@
 
             subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Sovereign (150)", creditCard);
             subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Imperial (50)");
-            var downgradedSubscriber = subscriberHelper.FetchOrCreate(subscriber.CustomerId, "", "");
+            var downgradedSubscriber = subscriberHelper.FetchSubscriber(subscriber.CustomerId);
 
             Assert.GreaterOrEqual(downgradedSubscriber.StoreCredit.Value, 0);
         }
@@ -163,6 +164,18 @@
             };
 
             var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Freebie", creditCard);
+        }
+
+        [TearDown]
+        public void IntegrationTearDown()
+        {
+            var factory = new SpreedlyClientFactory(new SpreedlyParameters
+            {
+                ApiKey = TestConstants.TestApiKey,
+                SiteName = TestConstants.TestSiteName
+            });
+
+            factory.GetTestClient().DeleteAllSubscribers();
         }
     }
 }

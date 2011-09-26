@@ -58,7 +58,7 @@
         }
 
         [Test]
-        public void FetchOrCreateForNonExistingCustomer_CallsCreateSubscriber()
+        public void CreateForNonExistingCustomer_CallsCreateSubscriber()
         {
             var nonExistingCustomerId = "IDontExist";
             var anEmailAddress = "fred@fred.fred";
@@ -79,13 +79,13 @@
                                                                                          }
                                                                         });
             
-            var subscriber = _subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
+            var subscriber = _subscriberHelper.CreateSubscriber(nonExistingCustomerId, anEmailAddress, aScreenName);
 
             _subscriberClient.ReceivedWithAnyArgs().CreateSubscriber(null);
         }
 
         [Test]
-        public void FetchOrCreateForNonExistingCustomer_ReturnsSubscriberWithCorrectCustomerId()
+        public void CreateForNonExistingCustomer_ReturnsSubscriberWithCorrectCustomerId()
         {
             var nonExistingCustomerId = "IDontExist";
             var anEmailAddress = "fred@fred.fred";
@@ -106,36 +106,14 @@
                                                                         }
                                                                     });
             
-            var subscriber = _subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
+            var subscriber = _subscriberHelper.CreateSubscriber(nonExistingCustomerId, anEmailAddress, aScreenName);
 
             Assert.AreEqual(nonExistingCustomerId, subscriber.CustomerId);
         }
 
         [Test]
-        public void FetchOrCreateForExistingCustomer_ReturnsSubscriberWithoutCreating()
-        {
-            var existingCustomerId = "IExist";
-            var anEmailAddress = "fred@fred.fred";
-            var aScreenName = "FreddieFred";
-            _subscriberClient.GetSubscriberByCustomerId(existingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
-                                                                                            {
-                                                                                                Status = SpreedlyStatus.Ok,
-                                                                                                Entity = new Subscriber
-                                                                                                {
-                                                                                                    CustomerId = existingCustomerId,
-                                                                                                    Email = anEmailAddress,
-                                                                                                    ScreenName = aScreenName
-                                                                                                }
-                                                                                            });
-            
-            var subscriber = _subscriberHelper.FetchOrCreate(existingCustomerId, anEmailAddress, aScreenName);
-
-            _subscriberClient.DidNotReceiveWithAnyArgs().CreateSubscriber(null);
-        }
-
-        [Test]
         [ExpectedException(typeof(SubscriberHelperException))]
-        public void FetchOrCreate_WhenFetchErrors_ThrowsSubscriberHelperException()
+        public void Fetch_WhenFetchErrors_ThrowsSubscriberHelperException()
         {
             var existingCustomerId = "IExist";
             var anEmailAddress = "fred@fred.fred";
@@ -148,30 +126,25 @@
                                                                                                    Error = new Exception(errorMessage)
                                                                                                });
 
-            var subscriber = _subscriberHelper.FetchOrCreate(existingCustomerId, anEmailAddress, aScreenName);
+            var subscriber = _subscriberHelper.FetchSubscriber(existingCustomerId);
         }
 
         [Test]
         [ExpectedException(typeof(SubscriberHelperException))]
-        public void FetchOrCreate_WhenCreateErrors_ThrowsSubscriberHelperException()
+        public void Create_WhenFetchErrors_ThrowsSubscriberHelperException()
         {
-            var nonExistingCustomerId = "IDontExist";
+            var somecustomerid = "SomeCustomerId";
             var anEmailAddress = "fred@fred.fred";
             var aScreenName = "FreddieFred";
             var errorMessage = "Bad stuff occurred";
-            _subscriberClient.GetSubscriberByCustomerId(nonExistingCustomerId).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
-                                                                                            {
-                                                                                                Status = SpreedlyStatus.NotFound,
-                                                                                                Entity = null
-                                                                                            });
             _subscriberClient.CreateSubscriber(null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
-                                                                    {
-                                                                        Status = SpreedlyStatus.ServerError,
-                                                                        Entity = null,
-                                                                        Error =  new Exception(errorMessage)
-                                                                    });
+            {
+                Status = SpreedlyStatus.ServerError,
+                Entity = null,
+                Error = new Exception(errorMessage)
+            });
 
-            var subscriber = _subscriberHelper.FetchOrCreate(nonExistingCustomerId, anEmailAddress, aScreenName);
+            var subscriber = _subscriberHelper.CreateSubscriber(somecustomerid, anEmailAddress, aScreenName);
         }
 
         [Test]

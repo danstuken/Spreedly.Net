@@ -41,15 +41,19 @@
             return subscriber.Status == SpreedlyStatus.Ok;
         }
 
-        public Subscriber FetchOrCreate(string customerId, string emailAddress, string screenName)
+        public Subscriber FetchSubscriber(string customerId)
         {
             var subscriber = _subscribersClient.GetSubscriberByCustomerId(customerId);
             if (subscriber.Status == SpreedlyStatus.Ok)
                 return subscriber.Entity;
-            if (subscriber.Status != SpreedlyStatus.NotFound)
-                throw new SubscriberHelperException(string.Format("Unexpected error fetching subscriber {0}", customerId), subscriber.RawBody, subscriber.Error);
+            if (subscriber.Status == SpreedlyStatus.NotFound)
+                throw new NotFoundException(string.Format("Subscriber {0} not found", customerId));
+            throw new SubscriberHelperException(string.Format("Unexpected error fetching subscriber {0}", customerId), subscriber.RawBody, subscriber.Error);
+        }
 
-            subscriber = _subscribersClient.CreateSubscriber(new Subscriber
+        public Subscriber CreateSubscriber(string customerId, string emailAddress, string screenName)
+        {
+            var subscriber = _subscribersClient.CreateSubscriber(new Subscriber
             {
                 CustomerId = customerId,
                 Email = emailAddress,
