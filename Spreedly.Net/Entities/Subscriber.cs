@@ -113,87 +113,142 @@
         
         public bool ShouldSerializeGraceUntil()
         {
-            return GraceUntil.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeStoreCredit()
         {
-            return StoreCredit.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeRecurring()
         {
-            return Recurring.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeOnMetered()
         {
-            return OnMetered.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeOnGift()
         {
-            return OnGift.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeOnTrial()
         {
-            return OnTrial.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeLifetimeSubscription()
         {
-            return LifetimeSubscription.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeEligibleForFreeTrial()
         {
-            return EligibleForFreeTrial.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeCreatedAt()
         {
-            return CreatedAt.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeCardExpiresBeforeNextAutoRenew()
         {
-            return CardExpiresBeforeNextAutoRenew.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeActiveUntil()
         {
-            return ActiveUntil.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeActive()
         {
-            return Active.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeUpdatedAt()
         {
-            return UpdatedAt.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeInGracePeriod()
         {
-            return InGracePeriod.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeReadyToRenew()
         {
-            return ReadyToRenew.HasValue;
+            return false;
         }
 
         public bool ShouldSerializeReadyToRenewSince()
         {
-            return ReadyToRenewSince.HasValue;
+            return false;
         }
 
         public bool ShouldSerializePaymentAccountOnFile()
         {
-            return PaymentAccountOnFile.HasValue;
+            return false;
+        }
+
+        public bool ShouldSerializeToken()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeStoreCreditCurrencyCode()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeFeatureLevel()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeSubscriptionPlanName()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeBillingAddress1()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeBillingCity()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeBillingCountry()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeBillingPhoneNumber()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeBillingState()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeBillingZip()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializePaymentAccountDisplay()
+        {
+            return false;
         }
 
         #endregion

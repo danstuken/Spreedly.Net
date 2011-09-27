@@ -8,6 +8,21 @@
 
     public class SubscriberHelperIntegrationTests
     {
+        [SetUp]
+        public void Init()
+        {
+            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
+            var subscriber = new Subscriber
+            {
+                CustomerId = "TestCustomerId",
+                ScreenName = "TestCustomerId",
+                Email = "test@test.madeup"
+            };
+
+            if (!subscriberHelper.Exists(subscriber.CustomerId))
+                subscriberHelper.CreateSubscriber(subscriber.CustomerId, subscriber.Email, subscriber.ScreenName);
+        }
+
         [Test]
         public void CreateSubscription_WithHelper_ReturnsInvoice()
         {
@@ -66,7 +81,6 @@
         public void DowngradeSubscription_GivesStoreCreditToSubscriber()
         {
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
-
             var subscriber = new Subscriber
             {
                 CustomerId = "TestCustomerId",
@@ -89,6 +103,36 @@
             var downgradedSubscriber = subscriberHelper.FetchSubscriber(subscriber.CustomerId);
 
             Assert.GreaterOrEqual(downgradedSubscriber.StoreCredit.Value, 0);
+        }
+
+        [Test]
+        public void UpgradingFromFreeTrial_RetrunsSubscriptionInvoice()
+        {
+            var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
+            var subscriber = new Subscriber
+            {
+                CustomerId = "TestCustomerId",
+                ScreenName = "TestCustomerId",
+                Email = "test@test.madeup"
+            };
+            var creditCard = new CreditCard
+            {
+                CardType = "visa",
+                ExpirationMonth = 12,
+                ExpirationYear = 2012,
+                FirstName = "Tester",
+                LastName = "Testing",
+                Number = TestConstants.ValidCard,
+                VerificationValue = "123"
+            };
+
+            var freeSubscriber = subscriberHelper.SubscribeToFreeTrialPlan(subscriber, "Freebie");
+            Assert.NotNull(freeSubscriber);
+
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(freeSubscriber,
+                                                                                     "Imperial (50)",
+                                                                                     creditCard);
+            Assert.NotNull(invoice);
         }
 
         [Test]

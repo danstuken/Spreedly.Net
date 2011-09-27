@@ -1,5 +1,6 @@
 ﻿namespace Spreedly.NetTests.IntegrationTests
 {
+    using System.Linq;
     using NUnit.Framework;
     using Net.Api;
     using Net.Client;
