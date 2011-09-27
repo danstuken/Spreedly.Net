@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Spreedly.Net</id>
     <version>1.0</version>
@@ -14,7 +14,7 @@
     <projectUrl>https://github.com/danstuken/Spreedly.Net</projectUrl>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="4.0.2" />
-      <dependency id="RestSharp" version="102" />
+      <dependency id="RestSharp" version="102.0" />
     </dependencies>
   </metadata>
 </package>
