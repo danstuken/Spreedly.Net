@@ -148,66 +148,17 @@
         }
 
         [Test]
-        [ExpectedException(typeof(SubscriberHelperException))]
-        public void SubscribingSubscriber_ToNonExistantPlan_ThrowsSubscriberHelperException()
-        {
-            var nonExistingFeatureLevel = "FeatureLevelNoExist";
-            var subscriber = new Subscriber
-                                 {
-                                     CustomerId = "Id"
-                                 };
-            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
-                                                                                   {
-                                                                                       Status = SpreedlyStatus.Ok,
-                                                                                       Entity = new SubscriptionPlanList
-                                                                                                    {
-                                                                                                        SubscriptionPlans = new List<SubscriptionPlan>()
-                                                                                                    }
-            
-                                                                                   });
-            _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>());
-            _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>());
-
-            var paidInvoice = _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                                          nonExistingFeatureLevel,
-                                                                                          new CreditCard());
-        }
-
-        [Test]
         public void SubscribingSubscriber_ToExistingPlan_ReturnsAnInvoice()
         {
-            var existingFeatureLevel = "FeatureLevelExists";
             var subscriber = new Subscriber
                                  {
                                      CustomerId = "Id"
                                  };
-            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
-                                                                                {
-                                                                                    Status = SpreedlyStatus.Ok,
-                                                                                    Entity = new SubscriptionPlanList
-                                                                                    {
-                                                                                        SubscriptionPlans = new List<SubscriptionPlan>()
-                                                                                                                {
-                                                                                                                    new SubscriptionPlan
-                                                                                                                        {
-                                                                                                                            FeatureLevel = existingFeatureLevel
-                                                                                                                        }
-                                                                                                                }
-                                                                                    }
-                                                                                });
-            _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
-                                                                      {
-                                                                          Status = SpreedlyStatus.Created,
-                                                                          Entity = new Invoice()
-                                                                      });
-            _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
-                                                                         {
-                                                                             Status = SpreedlyStatus.Ok,
-                                                                             Entity = new Invoice()
-                                                                         });
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.Created, new Invoice());
+            SetPayInvoiceStatusAndResult(SpreedlyStatus.Ok, new Invoice());
 
             var paidInvoice = _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                                          existingFeatureLevel,
+                                                                                          1111,
                                                                                           new CreditCard());
 
             Assert.NotNull(paidInvoice);
@@ -216,10 +167,152 @@
         [Test]
         public void ChangingSubscriptionLevelWithOnFilePayment_PaysInvoiceUsingOnFile()
         {
-            var existingFeatureLevel = "FeatureLevelExists";
             var subscriber = new Subscriber
             {
                 CustomerId = "Id"
+            };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.Created, new Invoice());
+            SetPayInvoiceStatusAndResult(SpreedlyStatus.Ok, new Invoice());
+
+            _subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, 1111);
+
+            _paymentsClient.Received().PayInvoice(Arg.Any<Invoice>(),
+                                                  Arg.Is<Payment>(p => p.AccountType == "on-file"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotFoundException))]
+        public void CreateSubscription_WithNotFoundForCreate_ThrowsNotFoundException()
+        {
+            var subscriber = new Subscriber
+            {
+                CustomerId = "Id"
+            };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.NotFound, null);
+
+            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                        11111,
+                                                                        new CreditCard());
+        }
+
+        [Test]
+        [ExpectedException(typeof(UnprocessableEntityException))]
+        public void CreateSubscription_WithUnprocesseableEntityForCreate_ThrowsUnprocessableEntityException()
+        {
+            var subscriber = new Subscriber
+            {
+                CustomerId = "Id"
+            };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.UnprocessableEntity, null);
+
+            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                        1111,
+                                                                        new CreditCard());
+        }
+
+        [Test]
+        [ExpectedException(typeof(ForbiddenActionException))]
+        public void CreateSubscription_WithForbiddenStatusForCreate_ThrowsForbiddenActionException()
+        {
+            var subscriber = new Subscriber
+            {
+                CustomerId = "Id"
+            };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.Forbidden, null);
+
+            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                        1111,
+                                                                        new CreditCard());
+        }
+
+        [Test]
+        [ExpectedException(typeof(ForbiddenActionException))]
+        public void CreateSubscription_WithForbiddenStatusForPay_ThrowsForbiddenActionException()
+        {
+            var subscriber = new Subscriber
+            {
+                CustomerId = "Id"
+            };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.Created, new Invoice());
+            SetPayInvoiceStatusAndResult(SpreedlyStatus.Forbidden, null);
+
+            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                        11111,
+                                                                        new CreditCard());
+        }
+
+        [Test]
+        [ExpectedException(typeof(UnprocessableEntityException))]
+        public void CreateSubscription_WithUnprocessableEntityStatusForPay_ThrowsUnprocessableEntityException()
+        {
+            var subscriber = new Subscriber
+            {
+                CustomerId = "Id"
+            };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.Created, new Invoice());
+            SetPayInvoiceStatusAndResult(SpreedlyStatus.UnprocessableEntity, null);
+
+            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                        11111,
+                                                                        new CreditCard());
+        }
+
+        [Test]
+        [ExpectedException(typeof(PaymentGatewayTimeoutException))]
+        public void CreateSubscription_WithGatewayTimeoutStatusForPay_ThrowsPaymentGatewayException()
+        {
+            var subscriber = new Subscriber
+                                 {
+                                     CustomerId = "Id"
+                                 };
+            SetCreateInvoiceStatusAndResult(SpreedlyStatus.Created, new Invoice());
+            SetPayInvoiceStatusAndResult(SpreedlyStatus.GatewayTimeout, null);
+
+            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                        1111,
+                                                                        new CreditCard());
+        }
+
+        [Test]
+        public void CreateFreeTrialSubscription_ForExistingPlan_ReturnsSubscriber()
+        {
+            var freeTrialPlanId = 11111;
+            var customerId = "111";
+            var subscriber = new Subscriber
+                                 {
+                                     CustomerId = customerId
+                                 };
+            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
+                                                                                {
+                                                                                    Status = SpreedlyStatus.Ok,
+                                                                                    Entity = new SubscriptionPlanList
+                                                                                    {
+                                                                                        SubscriptionPlans = new List<SubscriptionPlan>
+                                                                                                                {
+                                                                                                                    new SubscriptionPlan{ Id = freeTrialPlanId }
+                                                                                                                }
+                                                                                    }
+
+                                                                                });
+            _subscriberClient.SubscribeSubscriberToFreeTrial(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+                                                                                               {
+                                                                                                   Status = SpreedlyStatus.Ok,
+                                                                                                   Entity = new Subscriber()
+                                                                                               });
+
+            subscriber = _subscriberHelper.SubscribeToFreeTrialPlan(subscriber, freeTrialPlanId);
+
+            Assert.NotNull(subscriber);
+        }
+
+        [Test]
+        public void CreateFreeTrialSubscription_ForExistingPlan_PassesCorrectSubscriber()
+        {
+            var freeTrialPlanId = 11111;
+            var customerId = "111";
+            var subscriber = new Subscriber
+            {
+                CustomerId = customerId
             };
             _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
                                                                                   {
@@ -230,221 +323,41 @@
                                                                                                                {
                                                                                                                    new SubscriptionPlan
                                                                                                                        {
-                                                                                                                           FeatureLevel = existingFeatureLevel
+                                                                                                                           Id = freeTrialPlanId
                                                                                                                        }
                                                                                                                }
                                                                                                    }
+
                                                                                   });
-            _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
-                                                                      {
-                                                                          Status = SpreedlyStatus.Created,
-                                                                          Entity = new Invoice()
-                                                                      });
-            _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
-                                                                         {
-                                                                             Status = SpreedlyStatus.Ok,
-                                                                             Entity = new Invoice()
-                                                                         });
-
-            _subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, existingFeatureLevel);
-
-            _paymentsClient.Received().PayInvoice(Arg.Any<Invoice>(),
-                                                  Arg.Is<Payment>(p => p.AccountType == "on-file"));
-        }
-
-        [Test]
-        [ExpectedException(typeof(NotFoundException))]
-        public void CreateSubscription_WithNotFoundForCreate_ThrowsNotFoundException()
-        {
-            var existingFeatureLevel = "FeatureLevelExists";
-            var subscriber = new Subscriber
-            {
-                CustomerId = "Id"
-            };
-            SetForExistingPlanAndStatusReturnInCreateInvoice(existingFeatureLevel, SpreedlyStatus.NotFound);
-
-            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                        existingFeatureLevel,
-                                                                        new CreditCard());
-        }
-
-        [Test]
-        [ExpectedException(typeof(UnprocessableEntityException))]
-        public void CreateSubscription_WithUnprocesseableEntityForCreate_ThrowsUnprocessableEntityException()
-        {
-            var existingFeatureLevel = "FeatureLevelExists";
-            var subscriber = new Subscriber
-            {
-                CustomerId = "Id"
-            };
-            SetForExistingPlanAndStatusReturnInCreateInvoice(existingFeatureLevel, SpreedlyStatus.UnprocessableEntity);
-
-            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                        existingFeatureLevel,
-                                                                        new CreditCard());
-        }
-
-        [Test]
-        [ExpectedException(typeof(ForbiddenActionException))]
-        public void CreateSubscription_WithForbiddenStatusForCreate_ThrowsForbiddenActionException()
-        {
-            var existingFeatureLevel = "FeatureLevelExists";
-            var subscriber = new Subscriber
-            {
-                CustomerId = "Id"
-            };
-            SetForExistingPlanAndStatusReturnInCreateInvoice(existingFeatureLevel, SpreedlyStatus.Forbidden);
-
-            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                        existingFeatureLevel,
-                                                                        new CreditCard());
-        }
-
-        [Test]
-        [ExpectedException(typeof(ForbiddenActionException))]
-        public void CreateSubscription_WithForbiddenStatusForPay_ThrowsForbiddenActionException()
-        {
-            var existingFeatureLevel = "FeatureLevelExists";
-            var subscriber = new Subscriber
-            {
-                CustomerId = "Id"
-            };
-            SetForExistingPlanAndStatusReturnInPayInvoice(existingFeatureLevel, SpreedlyStatus.Forbidden);
-
-            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                        existingFeatureLevel,
-                                                                        new CreditCard());
-        }
-
-        [Test]
-        [ExpectedException(typeof(UnprocessableEntityException))]
-        public void CreateSubscription_WithUnprocessableEntityStatusForPay_ThrowsUnprocessableEntityException()
-        {
-            var existingFeatureLevel = "FeatureLevelExists";
-            var subscriber = new Subscriber
-            {
-                CustomerId = "Id"
-            };
-            SetForExistingPlanAndStatusReturnInPayInvoice(existingFeatureLevel, SpreedlyStatus.UnprocessableEntity);
-
-            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                        existingFeatureLevel,
-                                                                        new CreditCard());
-        }
-
-        [Test]
-        [ExpectedException(typeof(PaymentGatewayTimeoutException))]
-        public void CreateSubscription_WithGatewayTimeoutStatusForPay_ThrowsPaymentGatewayException()
-        {
-            var existingFeatureLevel = "FeatureLevelExists";
-            var subscriber = new Subscriber
-                                 {
-                                     CustomerId = "Id"
-                                 };
-            SetForExistingPlanAndStatusReturnInPayInvoice(existingFeatureLevel, SpreedlyStatus.GatewayTimeout);
-
-            _subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
-                                                                        existingFeatureLevel,
-                                                                        new CreditCard());
-        }
-
-        [Test]
-        public void CreateFreeTrialSubscription_ForExistingPlan_ReturnsSubscriber()
-        {
-            var freeTrialFeatureLevel = "FreeLevel";
-            var customerId = "111";
-            var subscriber = new Subscriber
-                                 {
-                                     CustomerId = customerId
-                                 };
-            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
-                                                                                {
-                                                                                    Status = SpreedlyStatus.Ok,
-                                                                                    Entity = new SubscriptionPlanList
-                                                                                    {
-                                                                                        SubscriptionPlans = new List<SubscriptionPlan>
-                                                                                                                {
-                                                                                                                    new SubscriptionPlan{ FeatureLevel = freeTrialFeatureLevel }
-                                                                                                                }
-                                                                                    }
-
-                                                                                });
-            _subscriberClient.SubscribeSubscriberToFreeTrial(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
+            _subscriberClient.SubscribeSubscriberToFreeTrial(null, null).ReturnsForAnyArgs(new SpreedlyResponse
+                                                                                               <Subscriber>
                                                                                                {
                                                                                                    Status = SpreedlyStatus.Ok,
                                                                                                    Entity = new Subscriber()
                                                                                                });
 
-            subscriber = _subscriberHelper.SubscribeToFreeTrialPlan(subscriber, freeTrialFeatureLevel);
-
-            Assert.NotNull(subscriber);
-        }
-
-        [Test]
-        public void CreateFreeTrialSubscription_ForExistingPlan_PassesCorrectSubscriber()
-        {
-            var freeTrialFeatureLevel = "FreeLevel";
-            var customerId = "111";
-            var subscriber = new Subscriber
-                                 {
-                                     CustomerId = customerId
-                                 };
-            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
-                                                                                {
-                                                                                    Status = SpreedlyStatus.Ok,
-                                                                                    Entity = new SubscriptionPlanList
-                                                                                    {
-                                                                                        SubscriptionPlans = new List<SubscriptionPlan>
-                                                                                                                {
-                                                                                                                    new SubscriptionPlan{ FeatureLevel = freeTrialFeatureLevel }
-                                                                                                                }
-                                                                                    }
-
-                                                                                });
-            _subscriberClient.SubscribeSubscriberToFreeTrial(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Subscriber>
-                                                                                               {
-                                                                                                   Status = SpreedlyStatus.Ok,
-                                                                                                   Entity = new Subscriber()
-                                                                                               });
-
-            _subscriberHelper.SubscribeToFreeTrialPlan(subscriber, freeTrialFeatureLevel);
+            _subscriberHelper.SubscribeToFreeTrialPlan(subscriber, freeTrialPlanId);
 
             _subscriberClient.Received().SubscribeSubscriberToFreeTrial(
                 Arg.Is<string>(s => s == customerId),
-                Arg.Is<SubscriptionPlan>(sp => sp.FeatureLevel == freeTrialFeatureLevel));
+                Arg.Is<SubscriptionPlan>(sp => sp.Id.Value == freeTrialPlanId));
         }
 
-        private void SetForExistingPlanAndStatusReturnInPayInvoice(string featureLevel, SpreedlyStatus status)
+        private void SetPayInvoiceStatusAndResult(SpreedlyStatus status, Invoice invoice)
         {
-            
-            SetForExistingPlanAndStatusReturnInCreateInvoice(featureLevel, SpreedlyStatus.Created);
             _paymentsClient.PayInvoice(null, null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
                                                                          {
                                                                              Status = status,
-                                                                             Entity = null
+                                                                             Entity = invoice
                                                                          });
         }
 
-        private void SetForExistingPlanAndStatusReturnInCreateInvoice(string featureLevel, SpreedlyStatus status)
+        private void SetCreateInvoiceStatusAndResult(SpreedlyStatus status, Invoice invoice)
         {
-            _subscriptionPlansClient.GetSubscriptionPlans().ReturnsForAnyArgs(new SpreedlyResponse<SubscriptionPlanList>
-                                                                                {
-                                                                                    Status = SpreedlyStatus.Ok,
-                                                                                    Entity = new SubscriptionPlanList
-                                                                                    {
-                                                                                        SubscriptionPlans = new List<SubscriptionPlan>()
-                                                                                                                {
-                                                                                                                    new SubscriptionPlan
-                                                                                                                        {
-                                                                                                                            FeatureLevel = featureLevel
-                                                                                                                        }
-                                                                                                                }
-                                                                                    }
-                                                                                });
             _paymentsClient.CreateInvoice(null).ReturnsForAnyArgs(new SpreedlyResponse<Invoice>
                                                                       {
                                                                           Status = status,
-                                                                          Entity = new Invoice()
+                                                                          Entity = invoice
                                                                       });
         }
     }

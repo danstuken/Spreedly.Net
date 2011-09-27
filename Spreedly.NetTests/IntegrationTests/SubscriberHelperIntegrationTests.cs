@@ -44,7 +44,7 @@
                 VerificationValue = "123"
             };
 
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, TestConstants.MediumSubscriptionPlanId, creditCard);
 
             Assert.NotNull(invoice);
         }
@@ -71,8 +71,10 @@
                 VerificationValue = "123"
             };
 
-            subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
-            var upgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Sovereign (150)");
+            subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber,
+                                                                       TestConstants.MediumSubscriptionPlanId,
+                                                                       creditCard);
+            var upgradeInvoice = subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, TestConstants.HighSubscriptionPlanId);
 
             Assert.AreEqual(15, upgradeInvoice.Amount.Value);
         }
@@ -98,8 +100,8 @@
                 VerificationValue = "123"
             };
 
-            subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Sovereign (150)", creditCard);
-            subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, "Imperial (50)");
+            subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, TestConstants.HighSubscriptionPlanId, creditCard);
+            subscriberHelper.ChangeSubscriberFeatureLevelWithOnFilePayment(subscriber, TestConstants.LowSubscriptionPlanId);
             var downgradedSubscriber = subscriberHelper.FetchSubscriber(subscriber.CustomerId);
 
             Assert.GreaterOrEqual(downgradedSubscriber.StoreCredit.Value, 0);
@@ -126,11 +128,11 @@
                 VerificationValue = "123"
             };
 
-            var freeSubscriber = subscriberHelper.SubscribeToFreeTrialPlan(subscriber, "Freebie");
+            var freeSubscriber = subscriberHelper.SubscribeToFreeTrialPlan(subscriber, TestConstants.FreePlanSubscriptionPlanId);
             Assert.NotNull(freeSubscriber);
 
             var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(freeSubscriber,
-                                                                                     "Imperial (50)",
+                                                                                     TestConstants.MediumSubscriptionPlanId,
                                                                                      creditCard);
             Assert.NotNull(invoice);
         }
@@ -157,7 +159,7 @@
                 VerificationValue = "123"
             };
 
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, TestConstants.MediumSubscriptionPlanId, creditCard);
         }
 
         [Test]
@@ -182,7 +184,7 @@
                 VerificationValue = "123"
             };
 
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Imperial (50)", creditCard);
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, TestConstants.MediumSubscriptionPlanId, creditCard);
         }
 
         [Test]
@@ -207,7 +209,7 @@
                 VerificationValue = "123"
             };
 
-            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, "Freebie", creditCard);
+            var invoice = subscriberHelper.SubscribeToSubscriptionPlanWithCreditCard(subscriber, TestConstants.FreePlanSubscriptionPlanId, creditCard);
         }
 
         [TearDown]

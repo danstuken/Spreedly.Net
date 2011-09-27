@@ -9,5 +9,9 @@
         public const string UnauthorisedCard = "4012888888881881";
         public const string GatewayUnavailableCard = "4111111111111111";
 
+        public const int LowSubscriptionPlanId = 14143;
+        public const int MediumSubscriptionPlanId = 14144;
+        public const int HighSubscriptionPlanId = 14145;
+        public const int FreePlanSubscriptionPlanId = 14142;
     }
 }

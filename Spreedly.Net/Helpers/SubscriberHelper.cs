@@ -1,5 +1,6 @@
 ﻿namespace Spreedly.Net.Helpers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using Api;
     using Client;
@@ -65,40 +66,32 @@
             return subscriber.Entity;
         }
 
-        public Invoice SubscribeToSubscriptionPlanWithCreditCard(Subscriber subscriber, string featureLevel, CreditCard creditCard)
+        public Invoice SubscribeToSubscriptionPlanWithCreditCard(Subscriber subscriber, int subscriptionPlanId, CreditCard creditCard)
         {
-            var featureLevelPlan = GetPlanFromFeatureLevel(featureLevel);
-            if (featureLevelPlan == null)
-                throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", featureLevel), null);
-
-            var invoice = CreateInvoice(featureLevelPlan.Id.Value, subscriber);
+            var invoice = CreateInvoice(subscriptionPlanId, subscriber);
             var paidInvoiceResponse = PayInvoice(invoice, new Payment
-            {
-                AccountType = "credit-card",
-                CreditCard = creditCard
-            });
+                                                              {
+                                                                  AccountType = "credit-card",
+                                                                  CreditCard = creditCard
+                                                              });
             return paidInvoiceResponse;
         }
 
-        public Invoice ChangeSubscriberFeatureLevelWithOnFilePayment(Subscriber subscriber, string newFeatureLevel)
+        public Invoice ChangeSubscriberFeatureLevelWithOnFilePayment(Subscriber subscriber, int subscriptionPlanId)
         {
-            var featureLevelPlan = GetPlanFromFeatureLevel(newFeatureLevel);
-            if (featureLevelPlan == null)
-                throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", newFeatureLevel), null);
-
-            var invoice = CreateInvoice(featureLevelPlan.Id.Value, subscriber);
+            var invoice = CreateInvoice(subscriptionPlanId, subscriber);
             var paidInvoiceResponse = PayInvoice(invoice, new Payment
-            {
-                AccountType = "on-file"
-            });
+                                                              {
+                                                                  AccountType = "on-file"
+                                                              });
             return paidInvoiceResponse;
         }
 
-        public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, string freeTrialFeatureLevel)
+        public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, int subscriptionPlanId)
         {
-            var freePlan = GetPlanFromFeatureLevel(freeTrialFeatureLevel);
+            var freePlan = GetPlanFromSubscriptionPlanId(subscriptionPlanId);
             if(freePlan == null)
-                throw new SubscriberHelperException(string.Format("Subscription Plan with Feature Level {0} not found", freeTrialFeatureLevel), null);
+                throw new SubscriberHelperException(string.Format("Free subscription plan with Id {0} not found", subscriptionPlanId), null);
 
             var subscribedSubscriber = _subscribersClient.SubscribeSubscriberToFreeTrial(subscriber.CustomerId, freePlan);
 
@@ -116,10 +109,18 @@
             return subscribedSubscriber.Entity;
         }
 
-        private SubscriptionPlan GetPlanFromFeatureLevel(string featureLevel)
+        public IEnumerable<SubscriptionPlan> GetSubscriptionPlansAtFeatureLevel(string featureLevel)
         {
             var plans = _subscriptionPlansClient.GetSubscriptionPlans();
-            return plans.Entity.SubscriptionPlans.FirstOrDefault(p => p.FeatureLevel == featureLevel);
+            if (plans.Entity == null || plans.Entity.SubscriptionPlans == null)
+                return new SubscriptionPlan[] {};
+            return plans.Entity.SubscriptionPlans.Where(p => p.FeatureLevel == featureLevel);
+        }
+
+        private SubscriptionPlan GetPlanFromSubscriptionPlanId(int subscriptionPlanId)
+        {
+            var plans = _subscriptionPlansClient.GetSubscriptionPlans();
+            return plans.Entity.SubscriptionPlans.FirstOrDefault(p => p.Id.Value == subscriptionPlanId);
         }
 
         private Invoice CreateInvoice(int featureLevelPlanId, Subscriber subscriber)
