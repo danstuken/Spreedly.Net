@@ -10,9 +10,11 @@
     <description>A simple and easy to use wrapper around Spreedly's REST API.</description>
     <copyright>Copyright 2011</copyright>
     <tags>Spreedly API REST</tags>
+    <language>en-GB</language>
+    <projectUrl>https://github.com/danstuken/Spreedly.Net</projectUrl>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="4.0.2" />
-      <dependency id="RestSharp" version="101.3" />
+      <dependency id="RestSharp" version="102" />
     </dependencies>
   </metadata>
 </package>
