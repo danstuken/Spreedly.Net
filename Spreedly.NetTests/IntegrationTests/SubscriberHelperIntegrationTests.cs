@@ -14,8 +14,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
 
@@ -29,8 +29,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard
@@ -56,8 +56,8 @@
 
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard
@@ -85,8 +85,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard
@@ -113,8 +113,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard
@@ -144,8 +144,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard
@@ -169,8 +169,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard
@@ -194,8 +194,8 @@
             var subscriberHelper = new SubscriberHelper(TestConstants.TestSiteName, TestConstants.TestApiKey);
             var subscriber = new Subscriber
             {
-                CustomerId = "TestCustomerId",
-                ScreenName = "TestCustomerId",
+                CustomerId = TestConstants.TestCustomerId,
+                ScreenName = TestConstants.TestCustomerId,
                 Email = "test@test.madeup"
             };
             var creditCard = new CreditCard

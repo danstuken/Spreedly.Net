@@ -25,8 +25,8 @@
 
             var newSubscriber = new Subscriber
                                     {
-                                        CustomerId = "TestCustomerId",
-                                        ScreenName = "TestCustomerId",
+                                        CustomerId = TestConstants.TestCustomerId,
+                                        ScreenName = TestConstants.TestCustomerId,
                                         Email = "test@test.madeup"
                                     };
             _subscribers.CreateSubscriber(newSubscriber);
@@ -40,8 +40,8 @@
                                                           SubscriptionPlanId = 14143,
                                                           Subscriber = new Subscriber
                                                                            {
-                                                                               CustomerId = "TestCustomerId",
-                                                                               ScreenName = "TestCustomerId",
+                                                                               CustomerId = TestConstants.TestCustomerId,
+                                                                               ScreenName = TestConstants.TestCustomerId,
                                                                                Email = "test@test.madeup"
                                                                            }
                                                       });
@@ -77,8 +77,8 @@
                 SubscriptionPlanId = 14143,
                 Subscriber = new Subscriber
                 {
-                    CustomerId = "TestCustomerId",
-                    ScreenName = "TestCustomerId",
+                    CustomerId = TestConstants.TestCustomerId,
+                    ScreenName = TestConstants.TestCustomerId,
                     Email = "test@test.madeup"
                 }
             });

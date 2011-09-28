@@ -2,6 +2,8 @@
 {
     public class TestConstants
     {
+        public const string TestCustomerId = "TestCustomerId";
+
         public const string TestApiKey = "61a2304391b862d526e95f11ee7a3815f0857e3f";
         public const string TestSiteName = "sitedocdan-test";
 
