@@ -31,7 +31,8 @@
         public RestRequest BuildPostRequest(string actionUrlSegment, object postData)
         {
             var request = BuildRequest(Method.POST, actionUrlSegment);
-            request.AddBody(postData);
+            if (postData != null)
+                request.AddBody(postData);
             return request;
         }
 
@@ -43,7 +44,8 @@
         public RestRequest BuildPutRequest(string actionUrlSegment, object putData)
         {
             var request = BuildRequest(Method.PUT, actionUrlSegment);
-            request.AddBody(putData);
+            if(putData != null)
+                request.AddBody(putData);
             return request;
         }
 

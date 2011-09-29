@@ -1,11 +1,11 @@
-﻿namespace Spreedly.NetTests.Deserialize
+﻿namespace Spreedly.NetTests.DeserializeTests
 {
     using System.IO;
     using System.Linq;
     using System.Xml;
     using System.Xml.Serialization;
     using NUnit.Framework;
-    using Net.Entities;
+    using Spreedly.Net.Entities;
     using Shouldly;
 
     public class SubscriberListTests

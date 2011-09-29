@@ -10,8 +10,8 @@
     {
         public string Serialize(object obj)
         {
-            if (obj == null) 
-                return String.Empty;
+            if (obj == null)
+                throw new ArgumentNullException("obj", "Cannot serialize null object for request");
 
             var ns = new XmlSerializerNamespaces();
             ns.Add(string.Empty, this.Namespace);
