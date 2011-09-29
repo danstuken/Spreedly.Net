@@ -89,7 +89,7 @@
 
         public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, int subscriptionPlanId)
         {
-            SubscribeToFreeTrialPlan(subscriber, subscriptionPlanId, false);
+            return SubscribeToFreeTrialPlan(subscriber, subscriptionPlanId, false);
         }
 
         public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, int subscriptionPlanId, bool forceReallow)
