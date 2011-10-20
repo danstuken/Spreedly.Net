@@ -1,5 +1,6 @@
 ﻿namespace Spreedly.Net.Xml
 {
+    using System;
     using System.IO;
     using System.Text;
     using System.Xml.Serialization;
@@ -9,6 +10,9 @@
     {
         public string Serialize(object obj)
         {
+            if (obj == null)
+                throw new ArgumentNullException("obj", "Cannot serialize null object for request");
+
             var ns = new XmlSerializerNamespaces();
             ns.Add(string.Empty, this.Namespace);
             var serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());

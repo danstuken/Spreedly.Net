@@ -89,29 +89,21 @@
 
         public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, int subscriptionPlanId)
         {
-            return SubscribeToFreeTrialPlan(subscriber, subscriptionPlanId, false);
-        }
-
-        public Subscriber SubscribeToFreeTrialPlan(Subscriber subscriber, int subscriptionPlanId, bool forceReallow)
-        {
             var freePlan = GetPlanFromSubscriptionPlanId(subscriptionPlanId);
-            if (freePlan == null)
+            if(freePlan == null)
                 throw new SubscriberHelperException(string.Format("Free subscription plan with Id {0} not found", subscriptionPlanId), null);
-
-            if (forceReallow)
-                _subscribersClient.AllowSubscriberAnotherFreeTrial(subscriber.CustomerId);
 
             var subscribedSubscriber = _subscribersClient.SubscribeSubscriberToFreeTrial(subscriber.CustomerId, freePlan);
 
-            if (subscribedSubscriber.Status == SpreedlyStatus.NotFound)
+            if(subscribedSubscriber.Status == SpreedlyStatus.NotFound)
                 throw new NotFoundException(string.Format("Failed to subscribe subscriber with customer id {0} to free plan. Subscriber not found.", subscriber.CustomerId));
 
-            if (subscribedSubscriber.Status == SpreedlyStatus.UnprocessableEntity)
-                throw new UnprocessableEntityException(string.Format("Failed to subscribe subscriber with customer id {0} to plan. Bad entity sent", subscriber.CustomerId),
+            if(subscribedSubscriber.Status == SpreedlyStatus.UnprocessableEntity)
+                throw new UnprocessableEntityException(string.Format("Failed to subscribe subscriber with customer id {0} to plan. Bad entity sent", subscriber.CustomerId), 
                     subscribedSubscriber.RawBody);
 
-            if (subscribedSubscriber.Status == SpreedlyStatus.Forbidden)
-                throw new ForbiddenActionException(string.Format("Failed to subscribe subscriber with customer id {0} to plan. Forbidden for this plan or subscriber",
+            if(subscribedSubscriber.Status == SpreedlyStatus.Forbidden)
+                throw new ForbiddenActionException(string.Format("Failed to subscribe subscriber with customer id {0} to plan. Forbidden for this plan or subscriber", 
                     subscriber.CustomerId), subscribedSubscriber.RawBody);
 
             return subscribedSubscriber.Entity;
