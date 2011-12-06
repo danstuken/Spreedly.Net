@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.2.1.0\lib\NET40\NSubstitute.dll</HintPath>
@@ -47,7 +47,7 @@
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.102.2\lib\net35\RestSharp.dll</HintPath>
+      <HintPath>..\packages\RestSharp.102.5\lib\net35\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="Shouldly">
       <HintPath>..\packages\Shouldly.1.1.0.0\lib\35\Shouldly.dll</HintPath>

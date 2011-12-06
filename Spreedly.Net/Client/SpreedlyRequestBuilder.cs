@@ -5,7 +5,7 @@
     using RestSharp.Serializers;
     using Xml;
 
-    internal class SpreedlyRequestBuilder: IRequestBuilder
+    internal class SpreedlyRequestBuilder : IRequestBuilder
     {
         private string _apiVersion;
         private string _siteName;
@@ -13,7 +13,7 @@
         private const string DefaultAPIVersion = "v4";
 
         internal SpreedlyRequestBuilder(string siteName)
-            :this(DefaultAPIVersion, siteName)
+            : this(DefaultAPIVersion, siteName)
         {
         }
 
@@ -44,7 +44,7 @@
         public RestRequest BuildPutRequest(string actionUrlSegment, object putData)
         {
             var request = BuildRequest(Method.PUT, actionUrlSegment);
-            if(putData != null)
+            if (putData != null)
                 request.AddBody(putData);
             return request;
         }
