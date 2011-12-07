@@ -8,8 +8,8 @@
     <ProjectGuid>{770EA0F3-EECC-4976-8BC2-358AB35C8C33}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spreedly.Net</RootNamespace>
-    <AssemblyName>Spreedly.Net</AssemblyName>
+    <RootNamespace>Spreedly</RootNamespace>
+    <AssemblyName>Spreedly</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -76,12 +76,6 @@
     <Compile Include="Entities\SubscriberList.cs" />
     <Compile Include="Entities\SubscriptionPlan.cs" />
     <Compile Include="Entities\SubscriptionPlanList.cs" />
-    <Compile Include="Helpers\Exceptions\ForbiddenActionException.cs" />
-    <Compile Include="Helpers\Exceptions\NotFoundException.cs" />
-    <Compile Include="Helpers\Exceptions\PaymentGatewayTimeoutException.cs" />
-    <Compile Include="Helpers\Exceptions\SubscriberHelperException.cs" />
-    <Compile Include="Helpers\Exceptions\UnprocessableEntityException.cs" />
-    <Compile Include="Helpers\SubscriberHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xml\FrameworkDeserializer.cs" />
     <Compile Include="Xml\FrameworkSerializer.cs" />

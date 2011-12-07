@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreedly.Net", "Spreedly.Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreedly.NetTests", "Spreedly.NetTests\Spreedly.NetTests.csproj", "{B4D8A305-5955-410F-9710-246DD8437C1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSpreedly.Net", "SimpleSpreedly.Net\SimpleSpreedly.Net.csproj", "{2C6045CA-675A-48EF-A0EC-66103EFD80B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,16 @@ Global
 		{B4D8A305-5955-410F-9710-246DD8437C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4D8A305-5955-410F-9710-246DD8437C1E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B4D8A305-5955-410F-9710-246DD8437C1E}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C6045CA-675A-48EF-A0EC-66103EFD80B7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

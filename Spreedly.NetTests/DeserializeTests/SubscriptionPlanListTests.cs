@@ -5,7 +5,8 @@
     using System.Xml;
     using System.Xml.Serialization;
     using NUnit.Framework;
-    using Spreedly.Net.Entities;
+
+    using Spreedly.Entities;
 
     public class SubscriptionPlanListTests
     {

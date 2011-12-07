@@ -1,7 +1,8 @@
-﻿namespace Spreedly.Net.Entities
+﻿namespace Spreedly.Entities
 {
     using System.Xml.Serialization;
-    using Xml;
+
+    using Spreedly.Xml;
 
     [XmlRoot(ElementName = "line-item")]
     public class LineItem

@@ -1,4 +1,4 @@
-﻿namespace Spreedly.Net.Entities
+﻿namespace Spreedly.Entities
 {
     using System;
     using System.Xml.Serialization;

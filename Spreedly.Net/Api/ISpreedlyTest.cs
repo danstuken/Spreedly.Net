@@ -1,6 +1,6 @@
-﻿namespace Spreedly.Net.Api
+﻿namespace Spreedly.Api
 {
-    using Client;
+    using Spreedly.Client;
 
     public interface ISpreedlyTest
     {

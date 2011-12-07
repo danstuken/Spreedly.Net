@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using NUnit.Framework;
-    using Net.Client;
+
     using RestSharp;
     using Shouldly;
 

@@ -4,11 +4,13 @@
     using System.Collections.Generic;
     using NSubstitute;
     using NUnit.Framework;
-    using Net.Api;
-    using Net.Client;
-    using Net.Entities;
+
     using Net.Helpers;
     using Net.Helpers.Exceptions;
+
+    using Spreedly.Api;
+    using Spreedly.Client;
+    using Spreedly.Entities;
 
     [TestFixture]
     public class SubscriberHelperTests

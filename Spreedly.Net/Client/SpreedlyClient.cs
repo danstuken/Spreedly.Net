@@ -1,10 +1,13 @@
-﻿namespace Spreedly.Net.Client
+﻿namespace Spreedly.Client
 {
     using System;
     using System.Net;
+
     using RestSharp;
+
     using System.Linq;
-    using Xml;
+
+    using Spreedly.Xml;
 
     internal class SpreedlyClient: ISpreedlyClient
     {

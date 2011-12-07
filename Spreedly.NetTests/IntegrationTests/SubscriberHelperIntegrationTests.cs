@@ -1,10 +1,12 @@
 ﻿namespace Spreedly.NetTests.IntegrationTests
 {
     using NUnit.Framework;
-    using Net.Api;
-    using Net.Entities;
+
     using Net.Helpers;
     using Net.Helpers.Exceptions;
+
+    using Spreedly.Api;
+    using Spreedly.Entities;
 
     public class SubscriberHelperIntegrationTests
     {

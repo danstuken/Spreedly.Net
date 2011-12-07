@@ -2,9 +2,10 @@
 {
     using System.Linq;
     using NUnit.Framework;
-    using Net.Api;
-    using Net.Client;
-    using Net.Entities;
+
+    using Spreedly.Api;
+    using Spreedly.Client;
+    using Spreedly.Entities;
 
     public class SubscriberIntegrationTests
     {

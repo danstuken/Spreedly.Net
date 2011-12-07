@@ -1,4 +1,4 @@
-﻿namespace Spreedly.Net.Client
+﻿namespace Spreedly.Client
 {
     public enum SpreedlyStatus
     {

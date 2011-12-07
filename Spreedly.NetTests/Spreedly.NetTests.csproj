@@ -8,8 +8,8 @@
     <ProjectGuid>{B4D8A305-5955-410F-9710-246DD8437C1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spreedly.NetTests</RootNamespace>
-    <AssemblyName>Spreedly.NetTests</AssemblyName>
+    <RootNamespace>SpreedlyTests</RootNamespace>
+    <AssemblyName>SpreedlyTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

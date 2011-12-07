@@ -1,6 +1,7 @@
-﻿namespace Spreedly.Net.Client
+﻿namespace Spreedly.Client
 {
     using System;
+
     using RestSharp;
 
     internal class StatusResolver: IStatusResolver

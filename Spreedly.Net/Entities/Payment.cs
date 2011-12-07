@@ -1,7 +1,7 @@
-﻿namespace Spreedly.Net.Entities
+﻿namespace Spreedly.Entities
 {
     using System.Xml.Serialization;
-    
+
     [XmlRoot(ElementName="payment")]
     public class Payment
     {

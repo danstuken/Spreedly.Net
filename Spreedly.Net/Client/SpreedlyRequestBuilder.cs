@@ -1,9 +1,11 @@
-﻿namespace Spreedly.Net.Client
+﻿namespace Spreedly.Client
 {
     using System.Text;
+
     using RestSharp;
     using RestSharp.Serializers;
-    using Xml;
+
+    using Spreedly.Xml;
 
     internal class SpreedlyRequestBuilder : IRequestBuilder
     {

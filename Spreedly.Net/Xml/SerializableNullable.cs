@@ -1,4 +1,4 @@
-﻿namespace Spreedly.Net.Xml
+﻿namespace Spreedly.Xml
 {
     using System;
     using System.ComponentModel;

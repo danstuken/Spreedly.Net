@@ -2,7 +2,6 @@
 {
     using System;
     using NUnit.Framework;
-    using Spreedly.Net.Xml;
 
     [TestFixture]
     public class FrameworkSerializerTests

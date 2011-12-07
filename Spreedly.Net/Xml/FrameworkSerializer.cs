@@ -1,9 +1,10 @@
-﻿namespace Spreedly.Net.Xml
+﻿namespace Spreedly.Xml
 {
     using System;
     using System.IO;
     using System.Text;
     using System.Xml.Serialization;
+
     using RestSharp.Serializers;
 
     internal class FrameworkSerializer: ISerializer

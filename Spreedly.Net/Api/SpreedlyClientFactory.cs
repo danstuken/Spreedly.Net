@@ -1,7 +1,8 @@
-﻿namespace Spreedly.Net.Api
+﻿namespace Spreedly.Api
 {
     using System;
-    using Client;
+
+    using Spreedly.Client;
 
     public class SpreedlyClientFactory
     {

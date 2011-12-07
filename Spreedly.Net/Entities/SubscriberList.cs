@@ -1,8 +1,8 @@
-﻿namespace Spreedly.Net.Entities
+﻿namespace Spreedly.Entities
 {
     using System.Collections.Generic;
     using System.Xml.Serialization;
-    
+
     [XmlRoot(ElementName = "subscribers")]
     public class SubscriberList
     {

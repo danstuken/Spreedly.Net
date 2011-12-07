@@ -1,7 +1,7 @@
-﻿namespace Spreedly.Net.Api
+﻿namespace Spreedly.Api
 {
-    using Client;
-    using Entities;
+    using Spreedly.Client;
+    using Spreedly.Entities;
 
     public class SpreedlyV4Api: ISpreedlyInvoices, ISpreedlySubscribers, ISpreedlySubscriptionPlans, ISpreedlyTest
     {

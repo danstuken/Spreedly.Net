@@ -1,9 +1,9 @@
 ﻿namespace Spreedly.NetTests.IntegrationTests
 {
     using NUnit.Framework;
-    using Net.Api;
-    using Net.Client;
-    using Net.Entities;
+
+    using Spreedly.Api;
+    using Spreedly.Client;
 
     [TestFixture]
     public class SubscriptionPlansIntegrationTests

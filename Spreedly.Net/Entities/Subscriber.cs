@@ -1,8 +1,9 @@
-﻿namespace Spreedly.Net.Entities
+﻿namespace Spreedly.Entities
 {
     using System;
     using System.Xml.Serialization;
-    using Xml;
+
+    using Spreedly.Xml;
 
     [XmlRoot(ElementName = "subscriber")]
     public class Subscriber

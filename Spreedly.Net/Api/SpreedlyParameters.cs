@@ -1,4 +1,4 @@
-﻿namespace Spreedly.Net.Api
+﻿namespace Spreedly.Api
 {
     public class SpreedlyParameters: ISpreedlyParameters
     {

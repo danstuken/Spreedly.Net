@@ -5,8 +5,10 @@
     using System.Xml;
     using System.Xml.Serialization;
     using NUnit.Framework;
-    using Spreedly.Net.Entities;
+
     using Shouldly;
+
+    using Spreedly.Entities;
 
     public class SubscriberListTests
     {
