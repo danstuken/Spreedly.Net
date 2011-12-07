@@ -13,8 +13,6 @@
     <language>en-GB</language>
     <projectUrl>https://github.com/danstuken/Spreedly.Net</projectUrl>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="4.0.4" />
-      <dependency id="RestSharp" version="102.5" />
       <dependency id="Spreedly.Net" version="0.0.35" />
     </dependencies>
   </metadata>
