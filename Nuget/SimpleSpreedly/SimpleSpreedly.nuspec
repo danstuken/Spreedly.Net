@@ -3,18 +3,19 @@
   <metadata>
     <id>Spreedly.Net</id>
     <version>1.0</version>
-    <title>Spreedly REST API wrapper for .Net framework</title>
+    <title>Simple Spreedly.Net</title>
     <authors>The Site Doctor</authors>
     <owners>The Site Doctor Ltd</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A simple and easy to use wrapper around Spreedly's REST API.</description>
+    <description>Spreedly helper library to help interaction with the Spreedly.Net REST API wrapper.</description>
     <copyright>Copyright 2011</copyright>
     <tags>Spreedly API REST</tags>
     <language>en-GB</language>
     <projectUrl>https://github.com/danstuken/Spreedly.Net</projectUrl>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="4.0.2" />
-      <dependency id="RestSharp" version="102.0" />
+      <dependency id="Newtonsoft.Json" version="4.0.4" />
+      <dependency id="RestSharp" version="102.5" />
+      <dependency id="Spreedly.Net" version="0.0.35" />
     </dependencies>
   </metadata>
 </package>
