@@ -121,7 +121,7 @@
         {
             var plans = _subscriptionPlansClient.GetSubscriptionPlans();
             if (plans.Entity == null || plans.Entity.SubscriptionPlans == null)
-                return new SubscriptionPlan[] {};
+                return new SubscriptionPlan[] { };
             return plans.Entity.SubscriptionPlans.Where(p => p.FeatureLevel == featureLevel);
         }
 
@@ -139,12 +139,15 @@
                 Subscriber = subscriber
             });
 
-            if(invoiceResponse.Status == SpreedlyStatus.Forbidden)
+            if (invoiceResponse.Status == SpreedlyStatus.Forbidden)
                 throw new ForbiddenActionException(string.Format("Failed to create invoice for subscription plan with id, {0}", featureLevelPlanId), invoiceResponse.RawBody);
-            if(invoiceResponse.Status == SpreedlyStatus.NotFound)
+
+            if (invoiceResponse.Status == SpreedlyStatus.NotFound)
                 throw new NotFoundException(string.Format("Failed to create invoice. No plan found for id {0}", featureLevelPlanId));
-            if(invoiceResponse.Status == SpreedlyStatus.UnprocessableEntity)
+
+            if (invoiceResponse.Status == SpreedlyStatus.UnprocessableEntity)
                 throw new UnprocessableEntityException(string.Format("Failed to create invoice for subscription plan with id {0}", featureLevelPlanId), invoiceResponse.RawBody);
+
             if (invoiceResponse.Status != SpreedlyStatus.Created)
                 throw new SubscriberHelperException("Failed to create invoice.", invoiceResponse.RawBody, invoiceResponse.Error);
 
@@ -155,16 +158,17 @@
         {
             var paidInvoiceResponse = _invoicesClient.PayInvoice(invoice, payment);
             if (paidInvoiceResponse.Status == SpreedlyStatus.Forbidden)
-                throw new ForbiddenActionException(string.Format("Error paying invoice {0}", invoice.Token),
-                                                   paidInvoiceResponse.RawBody);
+                throw new ForbiddenActionException(string.Format("Error paying invoice {0}", invoice.Token), paidInvoiceResponse.RawBody);
+
             if (paidInvoiceResponse.Status == SpreedlyStatus.UnprocessableEntity)
-                throw new UnprocessableEntityException(string.Format("Error paying invoice {0}", invoice.Token),
-                                                       paidInvoiceResponse.RawBody);
+                throw new UnprocessableEntityException(string.Format("Error paying invoice {0}", invoice.Token), paidInvoiceResponse.RawBody);
+
             if (paidInvoiceResponse.Status == SpreedlyStatus.GatewayTimeout)
                 throw new PaymentGatewayTimeoutException(string.Format("Payment gateway timed out during payment of invoice {0}", invoice.Token));
+
             if (paidInvoiceResponse.Status != SpreedlyStatus.Ok)
                 throw new SubscriberHelperException("Error closing subscription invoice", paidInvoiceResponse.RawBody, paidInvoiceResponse.Error);
-            
+
             return paidInvoiceResponse.Entity;
         }
     }
