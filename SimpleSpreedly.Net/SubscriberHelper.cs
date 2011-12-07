@@ -18,10 +18,15 @@
         private static T GetBadClientCaller<T>(string siteName, string apiKey)
         {
             if (_cachedClientFactory == null)
-                _cachedClientFactory = new SpreedlyClientFactory(apiKey, siteName);
+                _cachedClientFactory = new SpreedlyClientFactory(siteName, apiKey);
             return _cachedClientFactory.GetClient<T>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriberHelper"/> class. 
+        /// </summary>
+        /// <param name="siteName">The Short site name from your Spreedly account settings</param>
+        /// <param name="apiKey">The API Authentication Token from your Spreedly account settings</param>
         public SubscriberHelper(string siteName, string apiKey)
             : this(
                 GetBadClientCaller<ISpreedlySubscribers>(siteName, apiKey),
