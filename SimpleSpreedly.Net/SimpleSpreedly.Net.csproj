@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B4D8A305-5955-410F-9710-246DD8437C1E}</ProjectGuid>
+    <ProjectGuid>{2C6045CA-675A-48EF-A0EC-66103EFD80B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpreedlyTests</RootNamespace>
-    <AssemblyName>SpreedlyTests</AssemblyName>
+    <RootNamespace>SimpleSpreedly</RootNamespace>
+    <AssemblyName>SimpleSpreedly</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,23 +34,11 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>..\packages\NSubstitute.1.3.0.0\lib\NET40\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.mocks, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
-    </Reference>
-    <Reference Include="pnunit.framework, Version=1.0.4109.34242, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.102.5\lib\net35\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Shouldly">
-      <HintPath>..\packages\Shouldly.1.1.0.4\lib\35\Shouldly.dll</HintPath>
+    <Reference Include="Spreedly">
+      <HintPath>..\packages\Spreedly.Net.0.0.35\lib\4.0\Spreedly.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -61,31 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeserializeTests\SubscriberListTests.cs" />
-    <Compile Include="DeserializeTests\SubscriptionPlanListTests.cs" />
-    <Compile Include="HelperTests\SubscriberHelperTests.cs" />
-    <Compile Include="IntegrationTests\InvoiceIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\RequestIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\SubscriberHelperIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\SubscriberIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\SubscriptionPlansIntegrationTests.cs" />
+    <Compile Include="Exceptions\ForbiddenActionException.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
+    <Compile Include="Exceptions\PaymentGatewayTimeoutException.cs" />
+    <Compile Include="Exceptions\SubscriberHelperException.cs" />
+    <Compile Include="Exceptions\UnprocessableEntityException.cs" />
+    <Compile Include="Invoices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestTests\SpreedlyRequestBuilderTests.cs" />
-    <Compile Include="SerializeTests\FrameworkSerializerTests.cs" />
-    <Compile Include="TestConstants.cs" />
+    <Compile Include="SubscriberHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spreedly.Net\Spreedly.Net.csproj">
-      <Project>{770EA0F3-EECC-4976-8BC2-358AB35C8C33}</Project>
-      <Name>Spreedly.Net</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ProviderTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
