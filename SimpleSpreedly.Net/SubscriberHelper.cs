@@ -1,5 +1,6 @@
 ﻿namespace SimpleSpreedly
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -74,6 +75,19 @@
 
         public Invoice SubscribeToSubscriptionPlanWithCreditCard(Subscriber subscriber, int subscriptionPlanId, CreditCard creditCard)
         {
+            if (creditCard != null)
+            {
+                if (creditCard.ExpirationMonth > 12)
+                    throw new ArgumentOutOfRangeException("ExpirationMonth", "The credit card's expiration month cannot be greater than 12");
+
+                // Fix up if the user has passed in a 2 digit year
+                if (creditCard.ExpirationYear < 2000)
+                    creditCard.ExpirationYear += 2000;
+
+                if (creditCard.ExpirationYear < DateTime.Today.Year)
+                    throw new ArgumentOutOfRangeException("ExpirationYear", "The credit card's expiration year cannot be in the past");
+            }
+
             var invoice = CreateInvoice(subscriptionPlanId, subscriber);
             var paidInvoiceResponse = PayInvoice(invoice, new Payment
                                                               {
