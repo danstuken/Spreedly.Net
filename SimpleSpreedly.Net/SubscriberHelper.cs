@@ -73,6 +73,20 @@
             return subscriber.Entity;
         }
 
+        public Subscriber UpdateSubscriber(string customerId, string emailAddress, string screenName)
+        {
+            var subscriber = _subscribersClient.UpdateSubscriber(new Subscriber
+            {
+                CustomerId = customerId,
+                Email = emailAddress,
+                ScreenName = screenName
+            });
+
+            if (subscriber.Status != SpreedlyStatus.Ok)
+                throw new SubscriberHelperException(string.Format("Unexpected error updating subscriber {0}", customerId), subscriber.RawBody, subscriber.Error);
+            return subscriber.Entity;
+        }
+
         public Invoice SubscribeToSubscriptionPlanWithCreditCard(Subscriber subscriber, int subscriptionPlanId, CreditCard creditCard)
         {
             if (creditCard != null)

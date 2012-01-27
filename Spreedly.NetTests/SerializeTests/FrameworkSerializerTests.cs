@@ -1,4 +1,6 @@
-﻿namespace Spreedly.NetTests.SerializeTests
+﻿using Spreedly.Xml;
+
+namespace Spreedly.NetTests.SerializeTests
 {
     using System;
     using NUnit.Framework;

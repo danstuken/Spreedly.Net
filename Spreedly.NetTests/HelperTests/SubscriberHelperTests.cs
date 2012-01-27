@@ -1,4 +1,6 @@
-﻿namespace Spreedly.NetTests.HelperTests
+﻿using SimpleSpreedly;
+
+namespace Spreedly.NetTests.HelperTests
 {
     using System;
     using System.Collections.Generic;
