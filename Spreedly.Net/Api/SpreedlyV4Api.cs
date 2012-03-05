@@ -3,7 +3,7 @@
     using Spreedly.Client;
     using Spreedly.Entities;
 
-    public class SpreedlyV4Api: ISpreedlyInvoices, ISpreedlySubscribers, ISpreedlySubscriptionPlans, ISpreedlyTest
+    public class SpreedlyV4Api : ISpreedlyInvoices, ISpreedlySubscribers, ISpreedlySubscriptionPlans, ISpreedlyTest
     {
         private ISpreedlyClient _client;
 
@@ -60,7 +60,7 @@
 
         public SpreedlyResponse GiveSubscriberStoreCredit(string customerId, StoreCredit credit)
         {
-             return _client.Post(string.Format("subscribers/{0}/credits.xml", customerId), credit);
+            return _client.Post(string.Format("subscribers/{0}/credits.xml", customerId), credit);
         }
 
         public SpreedlyResponse AddFeeToSubscriber(string customerId, Fee fee)
@@ -80,7 +80,9 @@
 
         public SpreedlyResponse<Subscriber> UpdateSubscriber(Subscriber subscriber)
         {
-            return _client.Put<Subscriber>(string.Format("subscribers/{0}.xml", subscriber.CustomerId), subscriber) ;
+            var customerId = subscriber.CustomerId;
+            subscriber.CustomerId = null;
+            return _client.Put<Subscriber>(string.Format("subscribers/{0}.xml", customerId), subscriber);
         }
 
         public SpreedlyResponse DeleteSubscriber(string customerId)

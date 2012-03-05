@@ -13,7 +13,7 @@
     <language>en-GB</language>
     <projectUrl>https://github.com/danstuken/Spreedly.Net</projectUrl>
     <dependencies>
-      <dependency id="Spreedly.Net" version="0.0.35" />
+      <dependency id="Spreedly.Net" version="1.0.0.2" />
     </dependencies>
   </metadata>
 </package>

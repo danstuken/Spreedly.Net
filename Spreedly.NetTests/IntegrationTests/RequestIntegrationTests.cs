@@ -1,4 +1,6 @@
-﻿namespace Spreedly.NetTests.IntegrationTests
+﻿using Spreedly.Client;
+
+namespace Spreedly.NetTests.IntegrationTests
 {
     using System.Linq;
     using NUnit.Framework;

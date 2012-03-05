@@ -8,10 +8,12 @@
     <ProjectGuid>{B4D8A305-5955-410F-9710-246DD8437C1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpreedlyTests</RootNamespace>
-    <AssemblyName>SpreedlyTests</AssemblyName>
+    <RootNamespace>Spreedly.NetTests</RootNamespace>
+    <AssemblyName>Spreedly.NetTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\Spreedly.Net\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -79,15 +81,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ProviderTests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleSpreedly.Net\SimpleSpreedly.Net.csproj">
+      <Project>{2C6045CA-675A-48EF-A0EC-66103EFD80B7}</Project>
+      <Name>SimpleSpreedly.Net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spreedly.Net\Spreedly.Net.csproj">
       <Project>{770EA0F3-EECC-4976-8BC2-358AB35C8C33}</Project>
       <Name>Spreedly.Net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ProviderTests\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

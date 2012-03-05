@@ -1,4 +1,6 @@
-﻿namespace Spreedly.NetTests.RequestTests
+﻿using Spreedly.Client;
+
+namespace Spreedly.NetTests.RequestTests
 {
     using System.Linq;
     using NUnit.Framework;
