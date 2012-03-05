@@ -34,7 +34,7 @@
         </BuildDependsOn>
     </PropertyGroup>
     
-    <Target Name="CheckPrerequisites">
+    <Target Name="CheckPrerequisites" Condition="$(BuildPackage) == 'true'">
         <!-- Raise an error if we're unable to locate nuget.exe  -->
         <Error Condition="!Exists('$(NuGetExePath)')" Text="Unable to locate '$(NuGetExePath)'" />
     </Target>
